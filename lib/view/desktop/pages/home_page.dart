@@ -1,52 +1,81 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 
 import '../../../blogs/bloc_export.dart';
 import '../../../localization/app_localizations.dart';
 import '../../../models/entry.dart';
 import '../../../models/user.dart';
 
-class HomePageDesktop extends StatelessWidget {
+class HomePageDesktop extends StatefulWidget {
   HomePageDesktop({Key? key}) : super(key: key);
-  final ScrollController _horizontalScrollController = ScrollController();
-  final ScrollController _verticalScrollController = ScrollController();
+
+  @override
+  State<HomePageDesktop> createState() => _HomePageDesktopState();
+}
+
+class _HomePageDesktopState extends State<HomePageDesktop> {
+  ScrollController controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Center(
         child: BlocBuilder<UsersBloc, UsersState>(builder: (context, state) {
       final users = List.from(state.users);
-      var max = 0;
-      users.forEach((user) {
-        if (user.listEntries.length > max) {
-          max = user.listEntries.length;
-        }
-      });
-      return Column(children: [
-        Text(AppLocalizations.of(context).translate('usersList')),
-        Container(
+      return Column(
+        children: [
+          const SizedBox(
+            height: 30,
+          ),
+          Container(
+            color: Colors.blue[50],
             width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.height * 0.4,
-            child: Table(
-              defaultColumnWidth: const FixedColumnWidth(200),
-              children: state.users.map((user) {
-                TableCell cellName = TableCell(child: NameUserCard(user: user));
-                var entries = <TableCell>[];
-                entries.add(cellName);
-                for (var i = 0; i < max; i++) {
-                  if (user.listEntries.length > i) {
-                    entries.add(TableCell(
-                        child: EntryCard(
-                      entry: user.listEntries[i],
-                    )));
-                  } else {
-                    entries.add(TableCell(child: Container()));
-                  }
-                }
-                return TableRow(children: entries);
-              }).toList(),
-            ))
-      ]);
+            height: MediaQuery.of(context).size.height * 0.35,
+            child: Column(
+              children: [
+                Text(AppLocalizations.of(context).translate('users')),
+                Expanded(
+                  child: RawScrollbar(
+                    radius: Radius.circular(8),
+                    thickness: 10,
+                    thumbVisibility: true,
+                    controller: controller,
+                    child: ListView(
+                        controller: controller,
+                        scrollDirection: Axis.horizontal,
+                        children: users.map((user) {
+                          var list = <Widget>[];
+                          list.add(NameUserCard(user: user));
+                          for (var entry in user.listEntries) {
+                            list.add(EntryCard(entry: entry));
+                          }
+                          return SizedBox(
+                            width: 400,
+                            child: ListView(
+                              controller:
+                                  state.controllers[state.users.indexOf(user)],
+                              children: list,
+                            ),
+                          );
+                        }).toList()),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
     })));
   }
 }

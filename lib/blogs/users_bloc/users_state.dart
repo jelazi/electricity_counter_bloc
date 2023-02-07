@@ -3,8 +3,12 @@ part of 'users_bloc.dart';
 
 class UsersState extends Equatable {
   List<User> users;
+  List<ScrollController> controllers;
+  LinkedScrollControllerGroup controllerGroup;
   UsersState({
     required this.users,
+    required this.controllers,
+    required this.controllerGroup,
   });
 
   @override
@@ -12,13 +16,21 @@ class UsersState extends Equatable {
 
   UsersState copyWith({
     List<User>? users,
+    List<ScrollController>? controllers,
+    LinkedScrollControllerGroup? controllerGroup,
   }) {
     return UsersState(
       users: users ?? this.users,
+      controllers: controllers ?? this.controllers,
+      controllerGroup: controllerGroup ?? this.controllerGroup,
     );
   }
 }
 
 class UsersInitial extends UsersState {
-  UsersInitial({users}) : super(users: users);
+  UsersInitial({users, controllers, controllerGroup})
+      : super(
+            users: users,
+            controllers: controllers,
+            controllerGroup: controllerGroup);
 }
