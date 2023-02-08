@@ -1,13 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:data_table_2/data_table_2.dart';
+import 'package:electricity_counter/view/widgets/edit_dialogs/edit_text_dialog.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
-import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 
 import '../../../blogs/bloc_export.dart';
 import '../../../localization/app_localizations.dart';
-import '../../../models/entry.dart';
-import '../../../models/user.dart';
+import '../../widgets/entry_card.dart';
+import '../../widgets/name_user_card.dart';
 
 class HomePageDesktop extends StatefulWidget {
   HomePageDesktop({Key? key}) : super(key: key);
@@ -18,28 +18,14 @@ class HomePageDesktop extends StatefulWidget {
 
 class _HomePageDesktopState extends State<HomePageDesktop> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(body: Center(
         child: BlocBuilder<UsersBloc, UsersState>(builder: (context, state) {
-      var columns = <DataColumn>[];
-      columns.add(const DataColumn(label: Text('months')));
+      var columns = <DataColumn2>[];
+      columns.add(const DataColumn2(fixedWidth: 250, label: Text('months')));
       for (String id in state.users.keys) {
-        columns.add(DataColumn(
+        columns.add(DataColumn2(
+            fixedWidth: 300,
             label: NameUserCard(id: id, name: state.users[id] ?? '')));
       }
       var rows = <DataRow>[];
@@ -47,11 +33,13 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
         var cells = <DataCell>[];
         cells.add(DataCell(Text(month)));
         for (var i = 0; i < state.entries.length; i++) {
-          cells.add(DataCell(EntryCard(
-            value: state.entries[i][state.months.indexOf(month)],
-            idUser: state.users.keys.elementAt(i),
-            date: month,
-          )));
+          cells.add(DataCell(
+            EntryCard(
+              value: state.entries[i][state.months.indexOf(month)],
+              idUser: state.users.keys.elementAt(i),
+              date: month,
+            ),
+          ));
         }
         rows.add(DataRow(cells: cells));
       }
@@ -60,75 +48,55 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
           const SizedBox(
             height: 30,
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton.icon(
+                  onPressed: () {
+                    String title = 'addUser';
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return EditTextDialog(
+                            okClick: (nameUser) => context
+                                .read<UsersBloc>()
+                                .add(AddUser(nameUser: nameUser)),
+                            title: title,
+                            value: '',
+                          );
+                        });
+                  },
+                  icon: const Icon(Icons.person),
+                  label:
+                      Text(AppLocalizations.of(context).translate('addUser'))),
+              ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.note),
+                  label:
+                      Text(AppLocalizations.of(context).translate('addEnter')))
+            ],
+          ),
+          const SizedBox(
+            height: 30,
+          ),
           Container(
-              // color: Colors.red[50],
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.35,
+              color: Color.fromARGB(255, 236, 240, 246),
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.4,
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: DataTable2(
+                    fixedLeftColumns: 1,
                     columnSpacing: 12,
                     horizontalMargin: 12,
                     minWidth: 1200,
-                    headingRowColor: MaterialStateProperty.all(Colors.amber),
+                    headingRowColor: MaterialStateProperty.all(
+                        Color.fromARGB(255, 126, 195, 251)),
                     columns: columns,
                     rows: rows),
               )),
         ],
       );
     })));
-  }
-}
-
-class EntryCard extends StatelessWidget {
-  String value;
-  String idUser;
-  String date;
-  EntryCard({
-    Key? key,
-    required this.value,
-    required this.idUser,
-    required this.date,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        child: SizedBox(
-      width: 200,
-      child: ListTile(
-        leading: Text(value),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: () => context.read<UsersBloc>().add(RemoveEntry(
-                idUser: idUser,
-                date: date,
-              )),
-        ),
-      ),
-    ));
-  }
-}
-
-class NameUserCard extends StatelessWidget {
-  String name;
-  String id;
-  NameUserCard({
-    Key? key,
-    required this.name,
-    required this.id,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        color: Colors.red[50],
-        child: ListTile(
-          title: Text(name),
-          trailing: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => context.read<UsersBloc>().add(RemoveUser(id: id)),
-          ),
-        ));
   }
 }

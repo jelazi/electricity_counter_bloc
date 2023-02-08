@@ -22,7 +22,7 @@ class UsersRepository {
     for (var user in users) {
       if (user.id == idUser) {
         for (var entry in user.listEntries) {
-          if (DateFormat('yyyy-MM').format(entry.date) == date) {
+          if (DateFormat('d. MMMM yyyy', 'cs').format(entry.date) == date) {
             return entry;
           }
         }

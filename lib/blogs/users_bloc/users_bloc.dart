@@ -2,8 +2,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:f_logs/f_logs.dart';
-import 'package:flutter/material.dart';
-import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 
 import '../../models/entry.dart';
 import '../../models/user.dart';
@@ -45,23 +43,27 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     final state = this.state;
     var users = usersRepository.users;
     var mapUsers = <String, String>{};
+    var months = <DateTime>[];
     var listMonth = <String>[];
     var entries = <List<String>>[];
     for (var user in users) {
       mapUsers[user.id] = user.name;
       for (var entry in user.listEntries) {
-        String month = DateFormat('yyyy-MM').format(entry.date);
-        if (!listMonth.contains(month)) {
-          listMonth.add(month);
+        if (!months.contains(entry.date)) {
+          months.add(entry.date);
         }
       }
+    }
+    months.sort();
+    for (DateTime m in months) {
+      listMonth.add(DateFormat('d. MMMM yyyy', 'cs').format(m));
     }
     entries = List<List<String>>.generate(users.length,
         (index) => List<String>.generate(listMonth.length, (index) => ''));
     for (User user in users) {
       for (var month in listMonth) {
-        var entry = user.listEntries.firstWhereOrNull(
-            (entry) => DateFormat('yyyy-MM').format(entry.date) == month);
+        var entry = user.listEntries.firstWhereOrNull((entry) =>
+            DateFormat('d. MMMM yyyy', 'cs').format(entry.date) == month);
         if (entry == null) {
           entries[users.indexOf(user)][listMonth.indexOf(month)] = '';
         } else {
