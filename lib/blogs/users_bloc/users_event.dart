@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'users_bloc.dart';
 
 class UsersEvent extends Equatable {
@@ -24,25 +25,35 @@ class AddUser extends UsersEvent {
 }
 
 class RemoveUser extends UsersEvent {
-  User user;
-  RemoveUser({required this.user});
+  String id;
+  RemoveUser({required this.id});
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [id];
 }
 
 class AddEntry extends UsersEvent {
-  Entry entry;
-  AddEntry({required this.entry});
+  String idUser;
+  String date;
+  String value;
+  AddEntry({
+    required this.idUser,
+    required this.date,
+    required this.value,
+  });
 
   @override
-  List<Object> get props => [entry];
+  List<Object> get props => [idUser, date, value];
 }
 
 class RemoveEntry extends UsersEvent {
-  Entry entry;
-  RemoveEntry({required this.entry});
+  String idUser;
+  String date;
+  RemoveEntry({
+    required this.idUser,
+    required this.date,
+  });
 
   @override
-  List<Object> get props => [entry];
+  List<Object> get props => [idUser, date];
 }

@@ -2,35 +2,37 @@
 part of 'users_bloc.dart';
 
 class UsersState extends Equatable {
-  List<User> users;
-  List<ScrollController> controllers;
-  LinkedScrollControllerGroup controllerGroup;
+  Map<String, String> users;
+  List<String> months;
+  List<List<String>> entries;
+
   UsersState({
     required this.users,
-    required this.controllers,
-    required this.controllerGroup,
+    required this.months,
+    required this.entries,
   });
 
   @override
-  List<Object> get props => [users];
+  List<Object> get props => [users, months, entries];
 
   UsersState copyWith({
-    List<User>? users,
-    List<ScrollController>? controllers,
-    LinkedScrollControllerGroup? controllerGroup,
+    Map<String, String>? users,
+    List<String>? months,
+    List<List<String>>? entries,
   }) {
     return UsersState(
       users: users ?? this.users,
-      controllers: controllers ?? this.controllers,
-      controllerGroup: controllerGroup ?? this.controllerGroup,
+      months: months ?? this.months,
+      entries: entries ?? this.entries,
     );
   }
 }
 
 class UsersInitial extends UsersState {
-  UsersInitial({users, controllers, controllerGroup})
+  UsersInitial({users, month, entries})
       : super(
-            users: users,
-            controllers: controllers,
-            controllerGroup: controllerGroup);
+          users: users,
+          months: month,
+          entries: entries,
+        );
 }

@@ -4,13 +4,14 @@ import 'package:electricity_counter/services/enum.dart';
 
 class Entry {
   DateTime date;
-  double value;
   String idUser;
-  TypeEntry typeEntry;
+  double nt;
+  double vt;
+
   Entry({
     required this.date,
-    required this.value,
     required this.idUser,
-    required this.typeEntry,
+    required this.nt,
+    required this.vt,
   });
 }

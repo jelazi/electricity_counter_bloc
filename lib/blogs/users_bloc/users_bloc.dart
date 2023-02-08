@@ -8,6 +8,8 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import '../../models/entry.dart';
 import '../../models/user.dart';
 import '../../repositories/users_repository.dart';
+import 'package:intl/intl.dart';
+import 'package:collection/collection.dart';
 
 part 'users_event.dart';
 part 'users_state.dart';
@@ -17,9 +19,9 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   UsersBloc({
     required this.usersRepository,
   }) : super(UsersInitial(
-            users: const <User>[],
-            controllers: const <ScrollController>[],
-            controllerGroup: LinkedScrollControllerGroup())) {
+            users: const <String, String>{},
+            month: const <String>[],
+            entries: const <List<String>>[])) {
     on<_CreateUsers>(_createUsers);
     on<AddUser>(_addUser);
     on<RemoveUser>(_removeUser);
@@ -30,81 +32,96 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
 
   void _createUsers(_CreateUsers event, Emitter<UsersState> emit) {
     final state = this.state;
-    var controllers = <ScrollController>[];
-    var controllerGroup = LinkedScrollControllerGroup();
-    for (var user in event.users) {
-      ScrollController controller = ScrollController();
-      controller = controllerGroup.addAndGet();
-      controllers.add(controller);
-    }
+    var list = _generateUserTableData();
+
     emit(state.copyWith(
-      users: event.users,
-      controllers: controllers,
-      controllerGroup: controllerGroup,
+      users: list[0],
+      months: list[1],
+      entries: list[2],
     ));
+  }
+
+  List _generateUserTableData() {
+    final state = this.state;
+    var users = usersRepository.users;
+    var mapUsers = <String, String>{};
+    var listMonth = <String>[];
+    var entries = <List<String>>[];
+    for (var user in users) {
+      mapUsers[user.id] = user.name;
+      for (var entry in user.listEntries) {
+        String month = DateFormat('yyyy-MM').format(entry.date);
+        if (!listMonth.contains(month)) {
+          listMonth.add(month);
+        }
+      }
+    }
+    entries = List<List<String>>.generate(users.length,
+        (index) => List<String>.generate(listMonth.length, (index) => ''));
+    for (User user in users) {
+      for (var month in listMonth) {
+        var entry = user.listEntries.firstWhereOrNull(
+            (entry) => DateFormat('yyyy-MM').format(entry.date) == month);
+        if (entry == null) {
+          entries[users.indexOf(user)][listMonth.indexOf(month)] = '';
+        } else {
+          entries[users.indexOf(user)][listMonth.indexOf(month)] =
+              'nt: ${entry.nt} vt: ${entry.vt}';
+        }
+      }
+    }
+    return [mapUsers, listMonth, entries];
   }
 
   void _addUser(AddUser event, Emitter<UsersState> emit) {
     final state = this.state;
-    var user = usersRepository.createNewUser(event.nameUser);
-    if (user != null) {
-      var controllers = <ScrollController>[];
-      var controllerGroup = LinkedScrollControllerGroup();
-      for (var user in usersRepository.users) {
-        ScrollController controller = ScrollController();
-        controller = controllerGroup.addAndGet();
-        controllers.add(controller);
-      }
-      emit(state.copyWith(
-          users: List.from(usersRepository.users),
-          controllers: controllers,
-          controllerGroup: controllerGroup));
-    } else {
-      FLog.warning(text: 'user name is already in use');
-    }
+    usersRepository.createNewUser(event.nameUser);
+    var list = _generateUserTableData();
+    emit(state.copyWith(
+      users: list[0],
+      months: list[1],
+      entries: list[2],
+    ));
   }
 
   void _removeUser(RemoveUser event, Emitter<UsersState> emit) {
     final state = this.state;
-    usersRepository.deleteUser(event.user.id);
-    var controllers = <ScrollController>[];
-    var controllerGroup = LinkedScrollControllerGroup();
-    for (var user in usersRepository.users) {
-      ScrollController controller = ScrollController();
-      controller = controllerGroup.addAndGet();
-      controllers.add(controller);
-    }
-    var users = List<User>.from(usersRepository.users);
+    usersRepository.deleteUser(event.id);
+    var list = _generateUserTableData();
     emit(state.copyWith(
-      users: users,
-      controllers: controllers,
-      controllerGroup: controllerGroup,
+      users: list[0],
+      months: list[1],
+      entries: list[2],
     ));
   }
 
   void _addEntry(AddEntry event, Emitter<UsersState> emit) {
     final state = this.state;
-    usersRepository.addEntry(event.entry);
-
+    Entry? entry = usersRepository.getEntry(event.idUser, event.date);
+    if (entry == null) {
+      return;
+    }
+    usersRepository.addEntry(entry);
+    var list = _generateUserTableData();
     emit(state.copyWith(
-      users: List.from(
-        usersRepository.users,
-      ),
+      users: list[0],
+      months: list[1],
+      entries: list[2],
     ));
   }
 
   void _removeEntry(RemoveEntry event, Emitter<UsersState> emit) {
     final state = this.state;
-    usersRepository.removeEntry(event.entry);
-
-    var users = List<User>.from(usersRepository.users);
-
-    FLog.debug(text: '${users == state.users}');
-
-    emit(UsersState(
-      users: users,
-      controllers: state.controllers,
-      controllerGroup: state.controllerGroup,
+    Entry? entry = usersRepository.getEntry(event.idUser, event.date);
+    if (entry == null) {
+      return;
+    }
+    usersRepository.removeEntry(entry);
+    var list = _generateUserTableData();
+    emit(state.copyWith(
+      users: list[0],
+      months: list[1],
+      entries: list[2],
     ));
   }
 }

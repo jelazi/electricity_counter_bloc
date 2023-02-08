@@ -5,7 +5,7 @@ import 'entry.dart';
 class User {
   late String id;
   String name;
-  List listEntries;
+  List<Entry> listEntries;
 
   User({
     required this.id,
@@ -20,7 +20,7 @@ class User {
   User copyWith({
     String? id,
     String? name,
-    List? listEntries,
+    List<Entry>? listEntries,
   }) {
     return User(
       id: id ?? this.id,
