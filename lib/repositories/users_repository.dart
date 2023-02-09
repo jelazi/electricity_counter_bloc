@@ -19,7 +19,7 @@ class UsersRepository {
 
   UsersRepository({
     required this.settingsRepository,
-  });
+  }) {}
 
   Future<void> loadLocalUser() async {
     List<User> user = await settingsRepository.getListUser();
@@ -29,6 +29,10 @@ class UsersRepository {
 
   User? getUserById(String id) {
     return users.firstWhereOrNull((element) => element.id == id);
+  }
+
+  User? getUserByName(String name) {
+    return users.firstWhereOrNull((element) => element.name == name);
   }
 
   Entry? getEntry(String idUser, String date) {
@@ -176,7 +180,21 @@ class UsersRepository {
     }
     for (int i = 0; i < users.length; i++) {
       if (entry.idUser == users[i].id) {
+        int month = entry.date.month;
+        int year = entry.date.year;
+        var updateEntry = users[i].listEntries.firstWhereOrNull((element) =>
+            element.date.month == month && element.date.year == year);
+        if (updateEntry != null) {
+          FLog.debug(text: 'update entry');
+          users[i].listEntries[users[i].listEntries.indexOf(updateEntry)].nt =
+              entry.nt;
+          users[i].listEntries[users[i].listEntries.indexOf(updateEntry)].vt =
+              entry.vt;
+          settingsRepository.saveUser(users[i]);
+          return;
+        }
         users[i].addEntry(entry);
+        settingsRepository.saveUser(users[i]);
         return;
       }
     }

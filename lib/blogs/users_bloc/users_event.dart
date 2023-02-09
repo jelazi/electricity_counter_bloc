@@ -46,6 +46,20 @@ class AddEntry extends UsersEvent {
   List<Object> get props => [idUser, date, value];
 }
 
+class AddListEntry extends UsersEvent {
+  List<List<String>> entries;
+  int year;
+  int month;
+  AddListEntry({
+    required this.entries,
+    required this.year,
+    required this.month,
+  });
+
+  @override
+  List<Object> get props => [entries, year, month];
+}
+
 class RemoveEntry extends UsersEvent {
   String idUser;
   String date;

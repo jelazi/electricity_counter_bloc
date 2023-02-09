@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:electricity_counter/view/widgets/edit_dialogs/add_measurement.dart';
 import 'package:electricity_counter/view/widgets/edit_dialogs/edit_text_dialog.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,26 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
                   label:
                       Text(AppLocalizations.of(context).translate('addUser'))),
               ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    String title =
+                        AppLocalizations.of(context).translate('addEntry');
+
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AddMeasurementDialog(
+                            title: title,
+                            cancelLabel: AppLocalizations.of(context)
+                                .translate('cancel'),
+                            okLabel:
+                                AppLocalizations.of(context).translate('ok'),
+                            users: context.read<UsersBloc>().getCurrentUsers(),
+                            okClick: (listEntries) {},
+                            month: 'month',
+                            year: 'year',
+                          );
+                        });
+                  },
                   icon: const Icon(Icons.note),
                   label:
                       Text(AppLocalizations.of(context).translate('addEnter')))

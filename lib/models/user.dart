@@ -29,6 +29,9 @@ class User extends Equatable {
     required this.listEntries,
   });
 
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+
   void addEntry(Entry entry) {
     listEntries.add(entry);
   }

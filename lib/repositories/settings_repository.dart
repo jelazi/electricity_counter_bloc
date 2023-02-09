@@ -1,3 +1,5 @@
+import 'package:electricity_counter/models/invoice.dart';
+
 import '../models/user.dart';
 import '../services/enum.dart';
 import 'hive_provider.dart';
@@ -39,5 +41,17 @@ class SettingsRepository {
 
   Future<List<User>> getListUser() async {
     return _hiveProvider.getListUser();
+  }
+
+  void saveInvoice(Invoice invoice) {
+    _hiveProvider.setInvoice(invoice);
+  }
+
+  void removeInvoice(Invoice invoice) {
+    _hiveProvider.deleteInvoice(invoice);
+  }
+
+  Future<List<Invoice>> getListInvoice() async {
+    return _hiveProvider.getListInvoices();
   }
 }

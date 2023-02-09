@@ -11,6 +11,7 @@ class EditDialog extends StatelessWidget {
   Widget widgetContent;
   double height = 200;
   double width = 300;
+  bool okBack = true;
   EditDialog({
     Key? key,
     required this.title,
@@ -20,6 +21,7 @@ class EditDialog extends StatelessWidget {
     required this.widgetContent,
     this.height = 200,
     this.width = 300,
+    this.okBack = true,
   }) : super(key: key);
 
   @override
@@ -69,7 +71,9 @@ class EditDialog extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       okClick();
-                      Navigator.of(context).pop();
+                      if (okBack) {
+                        Navigator.of(context).pop();
+                      }
                     },
                     child: Text(okLabel)),
               ],

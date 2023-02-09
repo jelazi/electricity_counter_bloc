@@ -27,6 +27,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     on<AddUser>(_addUser);
     on<RemoveUser>(_removeUser);
     on<AddEntry>(_addEntry);
+    on<AddListEntry>(_addListEntry);
     on<RemoveEntry>(_removeEntry);
     add(_CreateUsers(users: List.from(usersRepository.users)));
   }
@@ -118,6 +119,30 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     ));
   }
 
+  void _addListEntry(AddListEntry event, Emitter<UsersState> emit) {
+    final state = this.state;
+    final entries = event.entries;
+    NumberFormat formatter = NumberFormat("00");
+    for (var i = 0; i < entries[0].length; i++) {
+      var user = usersRepository.getUserByName(entries[0][i]);
+      FLog.debug(text: '${user?.name}');
+      if (user != null) {
+        usersRepository.addEntry(Entry(
+            date: DateTime.parse(
+                '${event.year}-${formatter.format(event.month)}-01'),
+            idUser: user.id,
+            nt: double.parse(entries[1][i]),
+            vt: double.parse(entries[2][i])));
+      }
+    }
+    var list = _generateUserTableData();
+    emit(state.copyWith(
+      users: list[0],
+      months: list[1],
+      entries: list[2],
+    ));
+  }
+
   void _removeEntry(RemoveEntry event, Emitter<UsersState> emit) {
     final state = this.state;
     Entry? entry = usersRepository.getEntry(event.idUser, event.date);
@@ -131,5 +156,9 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       months: list[1],
       entries: list[2],
     ));
+  }
+
+  Map<String, String> getCurrentUsers() {
+    return state.users;
   }
 }
