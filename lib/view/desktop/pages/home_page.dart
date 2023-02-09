@@ -26,8 +26,8 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
   Widget build(BuildContext context) {
     return Scaffold(body: Center(
         child: BlocBuilder<UsersBloc, UsersState>(builder: (context, state) {
-      var header = <Widget>[];
-      header.add(Card(
+      var headerTableEnters = <Widget>[];
+      headerTableEnters.add(Card(
           child: SizedBox(
               height: 60,
               width: 200,
@@ -36,16 +36,16 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
                   title: Text(
                       AppLocalizations.of(context).translate('datesEnter'))))));
       for (String id in state.users.keys) {
-        header.add(
+        headerTableEnters.add(
           NameUserCard(id: id, name: state.users[id] ?? ''),
         );
       }
-      var rows = <Widget>[];
-      var number = 0;
-      var leftHeader = <Widget>[];
+      var rowsTableEnters = <Widget>[];
+      var numberTableEnters = 0;
+      var leftHeadertableEnters = <Widget>[];
       for (var month in state.months) {
         var cells = <Widget>[];
-        leftHeader.add(Card(
+        leftHeadertableEnters.add(Card(
           child: SizedBox(
               height: 60, width: 200, child: ListTile(title: Text(month))),
         ));
@@ -58,8 +58,8 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
             ),
           );
         }
-        number = cells.length;
-        rows.add(Row(
+        numberTableEnters = cells.length;
+        rowsTableEnters.add(Row(
           children: cells,
         ));
       }
@@ -105,10 +105,10 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
             height: 30,
           ),
           TableEnters(
-              number: number,
-              header: header,
-              leftHeader: leftHeader,
-              rows: rows),
+              number: numberTableEnters,
+              header: headerTableEnters,
+              leftHeader: leftHeadertableEnters,
+              rows: rowsTableEnters),
         ],
       );
     })));

@@ -1,3 +1,4 @@
+import '../models/user.dart';
 import '../services/enum.dart';
 import 'hive_provider.dart';
 
@@ -6,6 +7,10 @@ class SettingsRepository {
   late HiveProvider _hiveProvider;
   SettingsRepository() {
     _hiveProvider = HiveProvider();
+  }
+
+  Future<void> initBoxes() async {
+    await _hiveProvider.initBoxes();
   }
 
   void _loadAllValues() {
@@ -22,5 +27,17 @@ class SettingsRepository {
         _hiveProvider.setValue(TypeSettingsValue.locale, value);
         break;
     }
+  }
+
+  void saveUser(User user) {
+    _hiveProvider.setUser(user);
+  }
+
+  void removeUser(User user) {
+    _hiveProvider.deleteUser(user);
+  }
+
+  Future<List<User>> getListUser() async {
+    return _hiveProvider.getListUser();
   }
 }

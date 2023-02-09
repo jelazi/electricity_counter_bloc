@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'entry.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 @HiveType(typeId: 0)
 class Entry {
   @HiveField(0)

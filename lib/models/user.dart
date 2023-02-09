@@ -1,11 +1,27 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-
+import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'entry.dart';
 
-class User {
+part 'user.g.dart';
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+@HiveType(typeId: 1)
+class User extends Equatable {
+  @HiveField(0)
   late String id;
+  @HiveField(1)
   String name;
+  @HiveField(2)
   List<Entry> listEntries;
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        listEntries,
+      ];
 
   User({
     required this.id,

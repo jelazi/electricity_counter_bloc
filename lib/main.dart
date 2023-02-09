@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:electricity_counter/blogs/notification_bloc/notification_bloc.dart';
+import 'package:electricity_counter/models/entry.dart';
+import 'package:electricity_counter/models/user.dart';
 import 'package:electricity_counter/repositories/users_repository.dart';
 import 'package:electricity_counter/services/my_logger.dart';
 import 'package:electricity_counter/view/desktop/pages/home_page.dart';
@@ -18,77 +20,78 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MyLogger();
   FLog.debug(text: 'start App');
-  Directory directory = await pathProvider.getApplicationDocumentsDirectory();
-  Hive.init(directory.path);
+  await initHiveFunction();
+  SettingsRepository settingsRepository = SettingsRepository();
+  await settingsRepository.initBoxes();
+  UsersRepository usersRepository =
+      UsersRepository(settingsRepository: settingsRepository);
+  await usersRepository.loadLocalUser();
   runApp(
-    MultiRepositoryProvider(
+    MultiBlocProvider(
       providers: [
-        RepositoryProvider(
-          create: (context) => SettingsRepository(),
+        BlocProvider(
+          create: (context) =>
+              NotificationBloc(usersRepository: usersRepository),
         ),
-        RepositoryProvider(
-          create: (context) => UsersRepository(),
+        BlocProvider(
+          create: (context) => UsersBloc(
+              usersRepository: usersRepository,
+              settingsRepository: settingsRepository),
+        ),
+        BlocProvider(
+          create: (context) => LocaleCubit(),
         ),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => NotificationBloc(
-                usersRepository: context.read<UsersRepository>()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                UsersBloc(usersRepository: context.read<UsersRepository>()),
-          ),
-          BlocProvider(
-            create: (context) => LocaleCubit(),
-          ),
-        ],
-        child: BlocBuilder<UsersBloc, UsersState>(
-          builder: (context, state) {
-            return BlocBuilder<LocaleCubit, LocaleState>(
-              buildWhen: (previousState, currentState) =>
-                  previousState != currentState,
-              builder: (_, localeState) {
-                return MaterialApp(
-                  title: 'Flutter Demo',
-                  theme: ThemeData(
-                    primarySwatch: Colors.blue,
-                  ),
-                  debugShowCheckedModeBanner: false,
-                  supportedLocales: AppLocalizationsSetup.supportedLocales,
-                  localizationsDelegates:
-                      AppLocalizationsSetup.localizationsDelegates,
-                  localeResolutionCallback: ((locale, supportedLocales) {
-                    for (Locale supportedLocale in supportedLocales) {
-                      if (supportedLocale.languageCode ==
-                              locale!.languageCode &&
-                          supportedLocale.countryCode == locale.countryCode) {
-                        return supportedLocale;
-                      }
+      child: BlocBuilder<UsersBloc, UsersState>(
+        builder: (context, state) {
+          return BlocBuilder<LocaleCubit, LocaleState>(
+            buildWhen: (previousState, currentState) =>
+                previousState != currentState,
+            builder: (_, localeState) {
+              return MaterialApp(
+                title: 'Flutter Demo',
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                ),
+                debugShowCheckedModeBanner: false,
+                supportedLocales: AppLocalizationsSetup.supportedLocales,
+                localizationsDelegates:
+                    AppLocalizationsSetup.localizationsDelegates,
+                localeResolutionCallback: ((locale, supportedLocales) {
+                  for (Locale supportedLocale in supportedLocales) {
+                    if (supportedLocale.languageCode == locale!.languageCode &&
+                        supportedLocale.countryCode == locale.countryCode) {
+                      return supportedLocale;
                     }
-                    return supportedLocales.last;
-                  }),
-                  locale: localeState.locale,
-                  home: BlocListener<NotificationBloc, NotificationState>(
-                    listener: (context, state) {
-                      if (state.message.isNotEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.message.last)));
-                      }
-                    },
-                    child: Container(
-                      child: Platform.isAndroid || Platform.isIOS
-                          ? const HomePageMobile()
-                          : HomePageDesktop(),
-                    ),
+                  }
+                  return supportedLocales.last;
+                }),
+                locale: localeState.locale,
+                home: BlocListener<NotificationBloc, NotificationState>(
+                  listener: (context, state) {
+                    if (state.message.isNotEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.message.last)));
+                    }
+                  },
+                  child: Container(
+                    child: Platform.isAndroid || Platform.isIOS
+                        ? const HomePageMobile()
+                        : HomePageDesktop(),
                   ),
-                );
-              },
-            );
-          },
-        ),
+                ),
+              );
+            },
+          );
+        },
       ),
     ),
   );
+}
+
+Future<void> initHiveFunction() async {
+  Directory directory = await pathProvider.getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+  Hive.registerAdapter(EntryAdapter());
+  Hive.registerAdapter(UserAdapter());
 }

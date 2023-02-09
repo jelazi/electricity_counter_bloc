@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:electricity_counter/models/entry.dart';
+import 'package:electricity_counter/repositories/settings_repository.dart';
 import 'package:electricity_counter/services/enum.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:intl/intl.dart';
@@ -12,11 +13,18 @@ import 'package:collection/collection.dart';
 
 class UsersRepository {
   var users = <User>[];
+  SettingsRepository settingsRepository;
   final _errorMessageController = StreamController<String>();
   Stream<String> get errorMessage => _errorMessageController.stream;
 
-  UsersRepository() {
-    _loadTestData();
+  UsersRepository({
+    required this.settingsRepository,
+  });
+
+  Future<void> loadLocalUser() async {
+    List<User> user = await settingsRepository.getListUser();
+    users = user;
+    FLog.debug(text: 'here');
   }
 
   User? getUserById(String id) {
@@ -149,11 +157,17 @@ class UsersRepository {
     var uuid = const Uuid();
     User user = User(id: uuid.v4(), name: name, listEntries: []);
     users.add(user);
+    settingsRepository.saveUser(user);
+
     return user;
   }
 
   void deleteUser(String idUser) {
-    users.remove(users.firstWhereOrNull((element) => element.id == idUser));
+    User? user = getUserById(idUser);
+    if (user != null) {
+      settingsRepository.removeUser(user);
+      users.remove(users.firstWhereOrNull((element) => element.id == idUser));
+    }
   }
 
   void addEntry(Entry entry) {

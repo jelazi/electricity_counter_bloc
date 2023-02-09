@@ -1,21 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:f_logs/f_logs.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/entry.dart';
 import '../../models/user.dart';
+import '../../repositories/settings_repository.dart';
 import '../../repositories/users_repository.dart';
-import 'package:intl/intl.dart';
-import 'package:collection/collection.dart';
 
 part 'users_event.dart';
 part 'users_state.dart';
 
 class UsersBloc extends Bloc<UsersEvent, UsersState> {
   UsersRepository usersRepository;
+  SettingsRepository settingsRepository;
   UsersBloc({
     required this.usersRepository,
+    required this.settingsRepository,
   }) : super(UsersInitial(
             users: const <String, String>{},
             month: const <String>[],
@@ -30,6 +33,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
 
   void _createUsers(_CreateUsers event, Emitter<UsersState> emit) {
     final state = this.state;
+
     var list = _generateUserTableData();
 
     emit(state.copyWith(
@@ -42,6 +46,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   List _generateUserTableData() {
     final state = this.state;
     var users = usersRepository.users;
+
     var mapUsers = <String, String>{};
     var months = <DateTime>[];
     var listMonth = <String>[];
