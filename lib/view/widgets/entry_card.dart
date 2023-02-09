@@ -20,7 +20,8 @@ class EntryCard extends StatelessWidget {
     final key = GlobalKey();
     return Card(
         child: SizedBox(
-      width: 250,
+      height: 60,
+      width: 200,
       child: ListTile(
         leading: Text(value),
         trailing: IconButton(

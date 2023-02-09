@@ -15,11 +15,16 @@ class NameUserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         color: Colors.red[50],
-        child: ListTile(
-          title: Text(name),
-          trailing: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => context.read<UsersBloc>().add(RemoveUser(id: id)),
+        child: SizedBox(
+          height: 60,
+          width: 200,
+          child: ListTile(
+            title: Text(name),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () =>
+                  context.read<UsersBloc>().add(RemoveUser(id: id)),
+            ),
           ),
         ));
   }

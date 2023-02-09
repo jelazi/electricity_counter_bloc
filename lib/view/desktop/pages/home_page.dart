@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:data_table_2/data_table_2.dart';
+
 import 'package:electricity_counter/view/widgets/edit_dialogs/edit_text_dialog.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
+
+import 'package:horizontal_data_table/horizontal_data_table.dart';
 
 import '../../../blogs/bloc_export.dart';
 import '../../../localization/app_localizations.dart';
@@ -21,27 +23,37 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
   Widget build(BuildContext context) {
     return Scaffold(body: Center(
         child: BlocBuilder<UsersBloc, UsersState>(builder: (context, state) {
-      var columns = <DataColumn2>[];
-      columns.add(const DataColumn2(fixedWidth: 250, label: Text('months')));
+      var header = <Widget>[];
+      header.add(const Card(
+          child: SizedBox(
+              height: 60, width: 200, child: ListTile(title: Text('months')))));
       for (String id in state.users.keys) {
-        columns.add(DataColumn2(
-            fixedWidth: 300,
-            label: NameUserCard(id: id, name: state.users[id] ?? '')));
+        header.add(
+          NameUserCard(id: id, name: state.users[id] ?? ''),
+        );
       }
-      var rows = <DataRow>[];
+      var rows = <Widget>[];
+      var number = 0;
+      var leftHeader = <Widget>[];
       for (var month in state.months) {
-        var cells = <DataCell>[];
-        cells.add(DataCell(Text(month)));
+        var cells = <Widget>[];
+        leftHeader.add(Card(
+          child: SizedBox(
+              height: 60, width: 200, child: ListTile(title: Text(month))),
+        ));
         for (var i = 0; i < state.entries.length; i++) {
-          cells.add(DataCell(
+          cells.add(
             EntryCard(
               value: state.entries[i][state.months.indexOf(month)],
               idUser: state.users.keys.elementAt(i),
               date: month,
             ),
-          ));
+          );
         }
-        rows.add(DataRow(cells: cells));
+        number = cells.length;
+        rows.add(Row(
+          children: cells,
+        ));
       }
       return Column(
         children: [
@@ -80,20 +92,29 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
             height: 30,
           ),
           Container(
-              color: Color.fromARGB(255, 236, 240, 246),
-              width: double.infinity,
+              color: const Color.fromARGB(255, 236, 240, 246),
+              width: MediaQuery.of(context).size.width * 0.95,
               height: MediaQuery.of(context).size.height * 0.4,
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: DataTable2(
-                    fixedLeftColumns: 1,
-                    columnSpacing: 12,
-                    horizontalMargin: 12,
-                    minWidth: 1200,
-                    headingRowColor: MaterialStateProperty.all(
-                        Color.fromARGB(255, 126, 195, 251)),
-                    columns: columns,
-                    rows: rows),
+                child: HorizontalDataTable(
+                  leftHandSideColumnWidth: 200,
+                  rightHandSideColumnWidth: number * 210,
+                  isFixedHeader: true,
+                  headerWidgets: header,
+                  isFixedFooter: false,
+                  footerWidgets: header,
+                  leftSideChildren: leftHeader,
+                  rightSideChildren: rows,
+                  rowSeparatorWidget: const Divider(
+                    color: Colors.black38,
+                    height: 1.0,
+                    thickness: 2.0,
+                  ),
+                  leftHandSideColBackgroundColor:
+                      const Color.fromARGB(255, 177, 229, 126),
+                  rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
+                ),
               )),
         ],
       );

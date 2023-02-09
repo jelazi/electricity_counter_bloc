@@ -185,14 +185,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.4"
-  data_table_2:
-    dependency: "direct main"
-    description:
-      name: data_table_2
-      sha256: e5c0459872228d93698f93e0da1b2bee972bf1f4e9c5651b3f9f6f72f0b5f430
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.11"
   equatable:
     dependency: "direct main"
     description:
@@ -254,14 +246,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.1.1"
-  flutter_expandable_table:
-    dependency: "direct main"
-    description:
-      name: flutter_expandable_table
-      sha256: a9b85493587f7d52db6894e2d8e749345e065bf4dfb4e722f2a3fae7a650d1cf
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -275,14 +259,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_scroll_shadow:
-    dependency: transitive
-    description:
-      name: flutter_scroll_shadow
-      sha256: f2e52371c7596771de56dae1c4e2b4c80749952be3f6bd4915f2e95cc484fe53
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -328,6 +304,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  horizontal_data_table:
+    dependency: "direct main"
+    description:
+      name: horizontal_data_table
+      sha256: bee01e4bcc146febfff38c828f6dcb5968cc6160b95a4de6d91d87584f163eca
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.4"
   http_multi_server:
     dependency: transitive
     description:
@@ -392,14 +376,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.6.1"
-  linked_scroll_controller:
-    dependency: "direct main"
-    description:
-      name: linked_scroll_controller
-      sha256: e6020062bcf4ffc907ee7fd090fa971e65d8dfaac3c62baf601a3ced0b37986a
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   lints:
     dependency: transitive
     description:
