@@ -78,6 +78,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   void _addUser(AddUser event, Emitter<UsersState> emit) {
     final state = this.state;
     usersRepository.createNewUser(event.nameUser);
+
     var list = _generateUserTableData();
     emit(state.copyWith(
       users: list[0],

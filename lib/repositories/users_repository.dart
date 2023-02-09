@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+
 import 'package:electricity_counter/models/entry.dart';
 import 'package:electricity_counter/services/enum.dart';
 import 'package:f_logs/f_logs.dart';
@@ -10,6 +12,9 @@ import 'package:collection/collection.dart';
 
 class UsersRepository {
   var users = <User>[];
+  final _errorMessageController = StreamController<String>();
+  Stream<String> get errorMessage => _errorMessageController.stream;
+
   UsersRepository() {
     _loadTestData();
   }
@@ -138,6 +143,7 @@ class UsersRepository {
   User? createNewUser(String name) {
     if (users.firstWhereOrNull((element) => element.name == name) != null) {
       FLog.warning(text: 'this user name is already in use');
+      _errorMessageController.add('this user name is already in use');
       return null;
     }
     var uuid = const Uuid();

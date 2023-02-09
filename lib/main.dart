@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:electricity_counter/blogs/notification_bloc/notification_bloc.dart';
 import 'package:electricity_counter/repositories/users_repository.dart';
 import 'package:electricity_counter/services/my_logger.dart';
 import 'package:electricity_counter/view/desktop/pages/home_page.dart';
@@ -32,9 +33,12 @@ void main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
+            create: (context) => NotificationBloc(
+                usersRepository: context.read<UsersRepository>()),
+          ),
+          BlocProvider(
             create: (context) =>
                 UsersBloc(usersRepository: context.read<UsersRepository>()),
-            child: Container(),
           ),
           BlocProvider(
             create: (context) => LocaleCubit(),
@@ -66,9 +70,19 @@ void main() async {
                     return supportedLocales.last;
                   }),
                   locale: localeState.locale,
-                  home: Platform.isAndroid || Platform.isIOS
-                      ? const HomePageMobile()
-                      : HomePageDesktop(),
+                  home: BlocListener<NotificationBloc, NotificationState>(
+                    listener: (context, state) {
+                      if (state.message.isNotEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.message.last)));
+                      }
+                    },
+                    child: Container(
+                      child: Platform.isAndroid || Platform.isIOS
+                          ? const HomePageMobile()
+                          : HomePageDesktop(),
+                    ),
+                  ),
                 );
               },
             );
