@@ -2,10 +2,21 @@
 
 import 'package:electricity_counter/services/enum.dart';
 
+import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'entry.g.dart';
+
+@JsonSerializable()
+@HiveType(typeId: 0)
 class Entry {
+  @HiveField(0)
   DateTime date;
+  @HiveField(1)
   String idUser;
+  @HiveField(2)
   double nt;
+  @HiveField(3)
   double vt;
 
   Entry({
@@ -14,4 +25,7 @@ class Entry {
     required this.nt,
     required this.vt,
   });
+
+  factory Entry.fromJson(Map<String, dynamic> json) => _$EntryFromJson(json);
+  Map<String, dynamic> toJson() => _$EntryToJson(this);
 }
