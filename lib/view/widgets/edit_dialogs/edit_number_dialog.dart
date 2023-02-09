@@ -6,14 +6,19 @@ import 'edit_dialog.dart';
 
 class EditNumberDialog extends StatefulWidget {
   String title;
+  String cancelLabel;
+  String okLabel;
   num value;
   Function okClick;
   late TextEditingController textEditingController;
   EditNumberDialog({
     Key? key,
     required this.title,
+    required this.cancelLabel,
+    required this.okLabel,
     required this.value,
     required this.okClick,
+    required this.textEditingController,
   }) : super(key: key) {
     textEditingController = TextEditingController(text: value.toString());
   }
@@ -26,6 +31,8 @@ class _EditNumberDialogState extends State<EditNumberDialog> {
   @override
   Widget build(BuildContext context) {
     return EditDialog(
+        cancelLabel: widget.cancelLabel,
+        okLabel: widget.okLabel,
         title: widget.title,
         okClick: () {
           if (widget.value is int) {

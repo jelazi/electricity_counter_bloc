@@ -10,6 +10,7 @@ import '../../../blogs/bloc_export.dart';
 import '../../../localization/app_localizations.dart';
 import '../../widgets/entry_card.dart';
 import '../../widgets/name_user_card.dart';
+import '../tables/table_enters.dart';
 
 class HomePageDesktop extends StatefulWidget {
   HomePageDesktop({Key? key}) : super(key: key);
@@ -26,9 +27,14 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
     return Scaffold(body: Center(
         child: BlocBuilder<UsersBloc, UsersState>(builder: (context, state) {
       var header = <Widget>[];
-      header.add(const Card(
+      header.add(Card(
           child: SizedBox(
-              height: 60, width: 200, child: ListTile(title: Text('months')))));
+              height: 60,
+              width: 200,
+              child: ListTile(
+                  tileColor: Colors.red[50],
+                  title: Text(
+                      AppLocalizations.of(context).translate('datesEnter'))))));
       for (String id in state.users.keys) {
         header.add(
           NameUserCard(id: id, name: state.users[id] ?? ''),
@@ -67,11 +73,16 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
             children: [
               ElevatedButton.icon(
                   onPressed: () {
-                    String title = 'addUser';
+                    String title =
+                        AppLocalizations.of(context).translate('addUser');
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return EditTextDialog(
+                            cancelLabel: AppLocalizations.of(context)
+                                .translate('cancel'),
+                            okLabel:
+                                AppLocalizations.of(context).translate('ok'),
                             okClick: (nameUser) => context
                                 .read<UsersBloc>()
                                 .add(AddUser(nameUser: nameUser)),
@@ -93,31 +104,11 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
           const SizedBox(
             height: 30,
           ),
-          Container(
-              color: const Color.fromARGB(255, 236, 240, 246),
-              width: MediaQuery.of(context).size.width * 0.95,
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: HorizontalDataTable(
-                  leftHandSideColumnWidth: 200,
-                  rightHandSideColumnWidth: number * 210,
-                  isFixedHeader: true,
-                  headerWidgets: header,
-                  isFixedFooter: false,
-                  footerWidgets: header,
-                  leftSideChildren: leftHeader,
-                  rightSideChildren: rows,
-                  rowSeparatorWidget: const Divider(
-                    color: Colors.black38,
-                    height: 1.0,
-                    thickness: 2.0,
-                  ),
-                  leftHandSideColBackgroundColor:
-                      const Color.fromARGB(255, 177, 229, 126),
-                  rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
-                ),
-              )),
+          TableEnters(
+              number: number,
+              header: header,
+              leftHeader: leftHeader,
+              rows: rows),
         ],
       );
     })));

@@ -1,4 +1,7 @@
 {
     "ok" : "Ok",
-    "cancel" : "Zrušit"
+    "cancel" : "Zrušit",
+    "addUser": "Přidat uživatele",
+    "addEnter": "Přidat záznam elektroměrů", 
+    "datesEnter": "Data záznamů elektroměrů"
 }

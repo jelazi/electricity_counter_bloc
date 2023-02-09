@@ -5,6 +5,8 @@ import '../../../Localization/app_localizations.dart';
 
 class EditDialog extends StatelessWidget {
   String title;
+  String cancelLabel;
+  String okLabel;
   Function okClick;
   Widget widgetContent;
   double height = 200;
@@ -12,6 +14,8 @@ class EditDialog extends StatelessWidget {
   EditDialog({
     Key? key,
     required this.title,
+    required this.cancelLabel,
+    required this.okLabel,
     required this.okClick,
     required this.widgetContent,
     this.height = 200,
@@ -59,13 +63,15 @@ class EditDialog extends StatelessWidget {
               children: [
                 ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: Text('cancel')),
+                    child: Text(
+                      cancelLabel,
+                    )),
                 ElevatedButton(
                     onPressed: () {
                       okClick();
                       Navigator.of(context).pop();
                     },
-                    child: Text('ok')),
+                    child: Text(okLabel)),
               ],
             ),
           )
