@@ -5,16 +5,13 @@ import 'edit_dialog.dart';
 
 class EditDropdownDialog extends StatefulWidget {
   String title;
-  String cancelLabel;
-  String okLabel;
+
   List<String> values;
   String selectedValue;
   Function okClick;
   EditDropdownDialog({
     Key? key,
     required this.title,
-    required this.cancelLabel,
-    required this.okLabel,
     required this.values,
     required this.selectedValue,
     required this.okClick,
@@ -28,8 +25,6 @@ class _EditDropdownDialogState extends State<EditDropdownDialog> {
   @override
   Widget build(BuildContext context) {
     return EditDialog(
-      cancelLabel: widget.cancelLabel,
-      okLabel: widget.okLabel,
       title: widget.title,
       okClick: () {
         widget.okClick(widget.selectedValue);

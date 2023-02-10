@@ -1,12 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-import '../../../Localization/app_localizations.dart';
+import '../../../localization/app_localizations.dart';
 
 class EditDialog extends StatelessWidget {
   String title;
-  String cancelLabel;
-  String okLabel;
+
   Function okClick;
   Widget widgetContent;
   double height = 200;
@@ -15,8 +14,6 @@ class EditDialog extends StatelessWidget {
   EditDialog({
     Key? key,
     required this.title,
-    required this.cancelLabel,
-    required this.okLabel,
     required this.okClick,
     required this.widgetContent,
     this.height = 200,
@@ -66,7 +63,7 @@ class EditDialog extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
-                      cancelLabel,
+                      AppLocalizations.of(context).translate('cancel'),
                     )),
                 ElevatedButton(
                     onPressed: () {
@@ -75,7 +72,7 @@ class EditDialog extends StatelessWidget {
                         Navigator.of(context).pop();
                       }
                     },
-                    child: Text(okLabel)),
+                    child: Text(AppLocalizations.of(context).translate('ok'))),
               ],
             ),
           )

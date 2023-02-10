@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:electricity_counter/view/widgets/edit_dialogs/edit_dialog.dart';
 import 'package:flutter/services.dart';
 
-import '../../../Localization/app_localizations.dart';
+import '../../../localization/app_localizations.dart';
 
 class AddMeasurementDialog extends StatefulWidget {
   String title;
@@ -71,7 +71,6 @@ class _AddMeasurementDialogState extends State<AddMeasurementDialog> {
     int index = -1;
     return EditDialog(
       okBack: false,
-      cancelLabel: widget.cancelLabel,
       okClick: () {
         List errors = <String>[];
         List list = checkInputs();
@@ -112,7 +111,6 @@ class _AddMeasurementDialogState extends State<AddMeasurementDialog> {
           Navigator.of(context).pop();
         }
       },
-      okLabel: widget.okLabel,
       title: widget.title,
       height: MediaQuery.of(context).size.height * 0.6,
       width: MediaQuery.of(context).size.width * 0.6,

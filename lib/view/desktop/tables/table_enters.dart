@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 
 class TableEnters extends StatelessWidget {
+  final int number;
+  final List<Widget> header;
+  final List<Widget> leftHeader;
+  final List<Widget> rows;
   const TableEnters({
     super.key,
     required this.number,
@@ -9,11 +13,6 @@ class TableEnters extends StatelessWidget {
     required this.leftHeader,
     required this.rows,
   });
-
-  final int number;
-  final List<Widget> header;
-  final List<Widget> leftHeader;
-  final List<Widget> rows;
 
   @override
   Widget build(BuildContext context) {

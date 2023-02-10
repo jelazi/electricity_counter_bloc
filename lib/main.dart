@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:electricity_counter/blogs/notification_bloc/notification_bloc.dart';
 import 'package:electricity_counter/models/entry.dart';
 import 'package:electricity_counter/models/user.dart';
+import 'package:electricity_counter/repositories/invoices_repository.dart';
 import 'package:electricity_counter/repositories/users_repository.dart';
 import 'package:electricity_counter/services/my_logger.dart';
 import 'package:electricity_counter/view/desktop/pages/home_page.dart';
@@ -25,21 +26,30 @@ void main() async {
   await settingsRepository.initBoxes();
   UsersRepository usersRepository =
       UsersRepository(settingsRepository: settingsRepository);
-  await usersRepository.loadLocalUser();
+  await usersRepository.initListUsers();
+  InvoicesRepository invoicesRepository =
+      InvoicesRepository(settingsRepository: settingsRepository);
+  await invoicesRepository.initInvoices();
   runApp(
     MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => LocaleCubit(),
+        ),
         BlocProvider(
           create: (context) =>
               NotificationBloc(usersRepository: usersRepository),
         ),
         BlocProvider(
+            create: ((context) => InvoicesBloc(
+                  usersRepository: usersRepository,
+                  settingsRepository: settingsRepository,
+                  invoicesRepository: invoicesRepository,
+                ))),
+        BlocProvider(
           create: (context) => UsersBloc(
               usersRepository: usersRepository,
               settingsRepository: settingsRepository),
-        ),
-        BlocProvider(
-          create: (context) => LocaleCubit(),
         ),
       ],
       child: BlocBuilder<UsersBloc, UsersState>(

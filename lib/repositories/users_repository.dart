@@ -21,7 +21,7 @@ class UsersRepository {
     required this.settingsRepository,
   }) {}
 
-  Future<void> loadLocalUser() async {
+  Future<void> initListUsers() async {
     List<User> user = await settingsRepository.getListUser();
     users = user;
     FLog.debug(text: 'here');
