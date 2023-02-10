@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
-import '../../../localization/app_localizations.dart';
 
 class EditDialog extends StatelessWidget {
   String title;
@@ -63,7 +62,7 @@ class EditDialog extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
-                      AppLocalizations.of(context).translate('cancel'),
+                      ('cancel').tr(),
                     )),
                 ElevatedButton(
                     onPressed: () {
@@ -72,7 +71,7 @@ class EditDialog extends StatelessWidget {
                         Navigator.of(context).pop();
                       }
                     },
-                    child: Text(AppLocalizations.of(context).translate('ok'))),
+                    child: Text(('ok').tr())),
               ],
             ),
           )

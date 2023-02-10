@@ -1,7 +1,10 @@
+import 'dart:convert';
+
+import 'package:easy_localization/easy_localization.dart';
+import 'package:electricity_counter/view/desktop/pages/invoice_page.dart';
 import 'package:electricity_counter/view/desktop/tables/table_invoices.dart';
 import 'package:flutter/material.dart';
 
-import '../../../localization/app_localizations.dart';
 import '../../../blogs/bloc_export.dart';
 import '../../widgets/edit_dialogs/add_invoice.dart';
 
@@ -16,23 +19,46 @@ class InvoiceTableWidget extends StatelessWidget {
       child: BlocBuilder<InvoicesBloc, InvoicesState>(
         builder: (context, state) {
           var headerTableInvoices = <Widget>[];
-          headerTableInvoices.add(
-              Text(AppLocalizations.of(context).translate('itemsInvoices')));
+          headerTableInvoices.add(Card(
+            child: SizedBox(
+                width: 210,
+                child: ListTile(
+                  title: Text(('itemsInvoices').tr()),
+                )),
+          ));
           for (String id in state.invoices.keys) {
-            headerTableInvoices.add(Text(state.invoices[id] ?? ''));
+            headerTableInvoices.add(Card(
+                child: SizedBox(
+                    width: 210,
+                    child: ListTile(title: Text(state.invoices[id] ?? '')))));
           }
           var rowsTableInvoices = <Widget>[];
-          var numberTableInvoices = 0;
+          var numberTableInvoices = headerTableInvoices.length;
           var leftHeadertableInvoices = <Widget>[
-            Text(AppLocalizations.of(context).translate('fixRate')),
-            Text(AppLocalizations.of(context).translate('floatingRateNT')),
-            Text(AppLocalizations.of(context).translate('floatingRateVT')),
+            Card(
+              child: SizedBox(
+                  width: 200, child: ListTile(title: Text(('fixRate').tr()))),
+            ),
+            Card(
+                child: SizedBox(
+                    width: 200,
+                    child: ListTile(
+                      title: Text(('floatingRateNT').tr()),
+                    ))),
+            Card(
+                child: SizedBox(
+                    width: 200,
+                    child: ListTile(
+                      title: Text(('floatingRateVT').tr()),
+                    ))),
           ];
 
           for (var invoice in state.invoicesData) {
             var cells = <Widget>[];
             for (var data in invoice) {
-              cells.add(Text(data));
+              cells.add(Card(
+                  child: SizedBox(
+                      width: 210, child: ListTile(title: Text(data)))));
             }
             rowsTableInvoices.add(Row(children: cells));
           }
@@ -54,8 +80,7 @@ class InvoiceTableWidget extends StatelessWidget {
               children: [
                 ElevatedButton.icon(
                     onPressed: () {
-                      String title =
-                          AppLocalizations.of(context).translate('addInvoice');
+                      String title = ('addInvoice').tr();
 
                       showDialog(
                           context: context,
@@ -68,13 +93,17 @@ class InvoiceTableWidget extends StatelessWidget {
                           });
                     },
                     icon: Icon(Icons.inventory),
-                    label: Text(
-                        AppLocalizations.of(context).translate('addInvoice'))),
+                    label: Text(('addInvoice').tr())),
                 ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const InvoicesPage()),
+                      );
+                    },
                     icon: Icon(Icons.summarize),
-                    label: Text(
-                        AppLocalizations.of(context).translate('sumResult'))),
+                    label: Text(('sumResult').tr())),
               ],
             )
           ]);

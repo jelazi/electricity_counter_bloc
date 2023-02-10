@@ -3,7 +3,7 @@ part of 'users_bloc.dart';
 
 class UsersState extends Equatable {
   Map<String, String> users;
-  List<String> months;
+  List<DateTime> months;
   List<List<String>> entries;
 
   UsersState({
@@ -17,7 +17,7 @@ class UsersState extends Equatable {
 
   UsersState copyWith({
     Map<String, String>? users,
-    List<String>? months,
+    List<DateTime>? months,
     List<List<String>>? entries,
   }) {
     return UsersState(

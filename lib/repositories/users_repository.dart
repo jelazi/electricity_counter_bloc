@@ -24,7 +24,7 @@ class UsersRepository {
   Future<void> initListUsers() async {
     List<User> user = await settingsRepository.getListUser();
     users = user;
-    FLog.debug(text: 'here');
+    // FLog.debug(text: 'here');
   }
 
   User? getUserById(String id) {
@@ -35,14 +35,84 @@ class UsersRepository {
     return users.firstWhereOrNull((element) => element.name == name);
   }
 
-  Entry? getEntry(String idUser, String date) {
+  Entry? getEntry(String idUser, DateTime date) {
     for (var user in users) {
       if (user.id == idUser) {
         for (var entry in user.listEntries) {
-          if (DateFormat('d. MMMM yyyy', 'cs').format(entry.date) == date) {
+          if (entry.date.month == date.month && entry.date.year == date.year) {
             return entry;
           }
         }
+      }
+    }
+    return null;
+  }
+
+  User? createNewUser(String name) {
+    if (users.firstWhereOrNull((element) => element.name == name) != null) {
+      FLog.warning(text: 'this user name is already in use');
+      _errorMessageController.add('this user name is already in use');
+      return null;
+    }
+    var uuid = const Uuid();
+    User user = User(id: uuid.v4(), name: name, listEntries: []);
+    users.add(user);
+    settingsRepository.saveUser(user);
+
+    return user;
+  }
+
+  void deleteUser(String idUser) {
+    User? user = getUserById(idUser);
+    if (user != null) {
+      settingsRepository.removeUser(user);
+      users.remove(users.firstWhereOrNull((element) => element.id == idUser));
+    }
+  }
+
+  void addEntry(Entry entry) {
+    if (users.isEmpty) {
+      return;
+    }
+    for (int i = 0; i < users.length; i++) {
+      if (entry.idUser == users[i].id) {
+        int month = entry.date.month;
+        int year = entry.date.year;
+        var updateEntry = users[i].listEntries.firstWhereOrNull((element) =>
+            element.date.month == month && element.date.year == year);
+        if (updateEntry != null) {
+          FLog.debug(text: 'update entry');
+          users[i].listEntries[users[i].listEntries.indexOf(updateEntry)].nt =
+              entry.nt;
+          users[i].listEntries[users[i].listEntries.indexOf(updateEntry)].vt =
+              entry.vt;
+          settingsRepository.saveUser(users[i]);
+          return;
+        }
+        users[i].addEntry(entry);
+        settingsRepository.saveUser(users[i]);
+        return;
+      }
+    }
+  }
+
+  void removeEntry(Entry entry) {
+    if (users.isEmpty) {
+      return;
+    }
+    for (int i = 0; i < users.length; i++) {
+      if (entry.idUser == users[i].id) {
+        var user = users[i].copyWith();
+        var ent =
+            user.listEntries.firstWhereOrNull((element) => element == entry);
+        if (ent == null) {
+          FLog.error(text: 'entry is not here');
+          return;
+        }
+        user.listEntries.remove(ent);
+        users[i] = user;
+        FLog.debug(text: '${users[i].listEntries.length}');
+        return;
       }
     }
   }
@@ -150,74 +220,5 @@ class UsersRepository {
       nt: 150,
       idUser: cincalovi.id,
     ));
-  }
-
-  User? createNewUser(String name) {
-    if (users.firstWhereOrNull((element) => element.name == name) != null) {
-      FLog.warning(text: 'this user name is already in use');
-      _errorMessageController.add('this user name is already in use');
-      return null;
-    }
-    var uuid = const Uuid();
-    User user = User(id: uuid.v4(), name: name, listEntries: []);
-    users.add(user);
-    settingsRepository.saveUser(user);
-
-    return user;
-  }
-
-  void deleteUser(String idUser) {
-    User? user = getUserById(idUser);
-    if (user != null) {
-      settingsRepository.removeUser(user);
-      users.remove(users.firstWhereOrNull((element) => element.id == idUser));
-    }
-  }
-
-  void addEntry(Entry entry) {
-    if (users.isEmpty) {
-      return;
-    }
-    for (int i = 0; i < users.length; i++) {
-      if (entry.idUser == users[i].id) {
-        int month = entry.date.month;
-        int year = entry.date.year;
-        var updateEntry = users[i].listEntries.firstWhereOrNull((element) =>
-            element.date.month == month && element.date.year == year);
-        if (updateEntry != null) {
-          FLog.debug(text: 'update entry');
-          users[i].listEntries[users[i].listEntries.indexOf(updateEntry)].nt =
-              entry.nt;
-          users[i].listEntries[users[i].listEntries.indexOf(updateEntry)].vt =
-              entry.vt;
-          settingsRepository.saveUser(users[i]);
-          return;
-        }
-        users[i].addEntry(entry);
-        settingsRepository.saveUser(users[i]);
-        return;
-      }
-    }
-  }
-
-  void removeEntry(Entry entry) {
-    if (users.isEmpty) {
-      return;
-    }
-    for (int i = 0; i < users.length; i++) {
-      if (entry.idUser == users[i].id) {
-        var user = users[i].copyWith();
-        var ent =
-            user.listEntries.firstWhereOrNull((element) => element == entry);
-        if (ent == null) {
-          FLog.error(text: 'entry is not here');
-          return;
-        }
-        user.listEntries.remove(ent);
-        users[i] = user;
-        FLog.debug(text: '${users[i].listEntries.length}');
-        return;
-      }
-    }
   }
 }

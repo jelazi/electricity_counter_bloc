@@ -31,6 +31,7 @@ dependencies:
   horizontal_data_table: ^4.1.4
   hive_generator: ^2.0.0
   desktop_window: ^0.4.0
+  easy_localization: ^3.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0

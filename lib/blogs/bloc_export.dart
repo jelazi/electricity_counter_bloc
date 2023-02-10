@@ -1,5 +1,4 @@
 export './users_bloc/users_bloc.dart';
-export './locale_cubit/locale_cubit.dart';
 export './invoices_bloc/invoices_bloc.dart';
 export './notification_bloc/notification_bloc.dart';
 

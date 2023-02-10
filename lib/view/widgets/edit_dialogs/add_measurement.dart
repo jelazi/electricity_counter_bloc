@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:electricity_counter/blogs/bloc_export.dart';
 import 'package:electricity_counter/blogs/notification_bloc/notification_bloc.dart';
 import 'package:f_logs/f_logs.dart';
@@ -6,8 +7,6 @@ import 'package:flutter/material.dart';
 
 import 'package:electricity_counter/view/widgets/edit_dialogs/edit_dialog.dart';
 import 'package:flutter/services.dart';
-
-import '../../../localization/app_localizations.dart';
 
 class AddMeasurementDialog extends StatefulWidget {
   String title;
@@ -37,18 +36,18 @@ class AddMeasurementDialog extends StatefulWidget {
       vtEditingControllers.add(vtController);
     }
     listMonths = [
-      AppLocalizations.of(context).translate('january'),
-      AppLocalizations.of(context).translate('february'),
-      AppLocalizations.of(context).translate('march'),
-      AppLocalizations.of(context).translate('april'),
-      AppLocalizations.of(context).translate('mai'),
-      AppLocalizations.of(context).translate('june'),
-      AppLocalizations.of(context).translate('july'),
-      AppLocalizations.of(context).translate('august'),
-      AppLocalizations.of(context).translate('september'),
-      AppLocalizations.of(context).translate('october'),
-      AppLocalizations.of(context).translate('november'),
-      AppLocalizations.of(context).translate('december'),
+      ('january').tr(),
+      ('february').tr(),
+      ('march').tr(),
+      ('april').tr(),
+      ('mai').tr(),
+      ('june').tr(),
+      ('july').tr(),
+      ('august').tr(),
+      ('september').tr(),
+      ('october').tr(),
+      ('november').tr(),
+      ('december').tr(),
     ];
     var currentYear = DateTime.now().year;
     var currentMonth = DateTime.now().month;
@@ -86,9 +85,8 @@ class _AddMeasurementDialogState extends State<AddMeasurementDialog> {
           index++;
         }
         if (errors.isNotEmpty) {
-          context.read<NotificationBloc>().add(CreateMessage(
-              message: AppLocalizations.of(context).translate('emptyData') +
-                  errors.join(", ")));
+          context.read<NotificationBloc>().add(
+              CreateMessage(message: ('emptyData').tr() + errors.join(", ")));
         } else {
           var list = <List<String>>[];
           list.add(widget.users.values.toList());
@@ -119,7 +117,7 @@ class _AddMeasurementDialogState extends State<AddMeasurementDialog> {
             children: [
               Row(
                 children: [
-                  Text(AppLocalizations.of(context).translate('month')),
+                  Text(('month').tr()),
                   SizedBox(
                     width: 100,
                     child: DropdownButton(
@@ -142,7 +140,7 @@ class _AddMeasurementDialogState extends State<AddMeasurementDialog> {
               ),
               Row(
                 children: [
-                  Text(AppLocalizations.of(context).translate('year')),
+                  Text(('year').tr()),
                   SizedBox(
                     width: 100,
                     child: DropdownButton(

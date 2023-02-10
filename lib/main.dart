@@ -13,18 +13,21 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import 'blogs/bloc_export.dart';
-import 'localization/app_localizations_setup.dart';
+import 'models/invoice.dart';
 import 'repositories/settings_repository.dart';
 import 'view/mobile/pages/home_page.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-void main() async {
+void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   if (Platform.isWindows || Platform.isMacOS) {
     await DesktopWindow.setMinWindowSize(const Size(800, 600));
   }
   MyLogger();
-  FLog.debug(text: 'start App');
+  // FLog.debug(text: 'start App');
   await initHiveFunction();
   SettingsRepository settingsRepository = SettingsRepository();
   await settingsRepository.initBoxes();
@@ -35,69 +38,57 @@ void main() async {
       InvoicesRepository(settingsRepository: settingsRepository);
   await invoicesRepository.initInvoices();
   runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => LocaleCubit(),
-        ),
-        BlocProvider(
-          create: (context) =>
-              NotificationBloc(usersRepository: usersRepository),
-        ),
-        BlocProvider(
-            create: ((context) => InvoicesBloc(
-                  usersRepository: usersRepository,
-                  settingsRepository: settingsRepository,
-                  invoicesRepository: invoicesRepository,
-                ))),
-        BlocProvider(
-          create: (context) => UsersBloc(
-              usersRepository: usersRepository,
-              settingsRepository: settingsRepository),
-        ),
-      ],
-      child: BlocBuilder<UsersBloc, UsersState>(
-        builder: (context, state) {
-          return BlocBuilder<LocaleCubit, LocaleState>(
-            buildWhen: (previousState, currentState) =>
-                previousState != currentState,
-            builder: (_, localeState) {
-              return MaterialApp(
-                title: 'Flutter Demo',
-                theme: ThemeData(
-                  primarySwatch: Colors.blue,
-                ),
-                debugShowCheckedModeBanner: false,
-                supportedLocales: AppLocalizationsSetup.supportedLocales,
-                localizationsDelegates:
-                    AppLocalizationsSetup.localizationsDelegates,
-                localeResolutionCallback: ((locale, supportedLocales) {
-                  for (Locale supportedLocale in supportedLocales) {
-                    if (supportedLocale.languageCode == locale!.languageCode &&
-                        supportedLocale.countryCode == locale.countryCode) {
-                      return supportedLocale;
-                    }
+    EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('cs')],
+      path: 'assets/lang',
+      fallbackLocale: Locale('en'),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => NotificationBloc(
+                usersRepository: usersRepository,
+                invoicesRepository: invoicesRepository),
+          ),
+          BlocProvider(
+              create: ((context) => InvoicesBloc(
+                    context: context,
+                    usersRepository: usersRepository,
+                    settingsRepository: settingsRepository,
+                    invoicesRepository: invoicesRepository,
+                  ))),
+          BlocProvider(
+            create: (context) => UsersBloc(
+                usersRepository: usersRepository,
+                settingsRepository: settingsRepository),
+          ),
+        ],
+        child: BlocBuilder<UsersBloc, UsersState>(
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              debugShowCheckedModeBanner: false,
+              supportedLocales: context.supportedLocales,
+              localizationsDelegates: context.localizationDelegates,
+              locale: context.locale,
+              home: BlocListener<NotificationBloc, NotificationState>(
+                listener: (context, state) {
+                  if (state.message.isNotEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.message.last)));
                   }
-                  return supportedLocales.last;
-                }),
-                locale: localeState.locale,
-                home: BlocListener<NotificationBloc, NotificationState>(
-                  listener: (context, state) {
-                    if (state.message.isNotEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(state.message.last)));
-                    }
-                  },
-                  child: Container(
-                    child: Platform.isAndroid || Platform.isIOS
-                        ? const HomePageMobile()
-                        : HomePageDesktop(),
-                  ),
+                },
+                child: Container(
+                  child: Platform.isAndroid || Platform.isIOS
+                      ? const HomePageMobile()
+                      : HomePageDesktop(),
                 ),
-              );
-            },
-          );
-        },
+              ),
+            );
+          },
+        ),
       ),
     ),
   );
@@ -108,4 +99,5 @@ Future<void> initHiveFunction() async {
   Hive.init(directory.path);
   Hive.registerAdapter(EntryAdapter());
   Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(InvoiceAdapter());
 }

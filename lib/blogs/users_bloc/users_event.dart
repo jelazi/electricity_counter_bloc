@@ -34,7 +34,7 @@ class RemoveUser extends UsersEvent {
 
 class AddEntry extends UsersEvent {
   String idUser;
-  String date;
+  DateTime date;
   String value;
   AddEntry({
     required this.idUser,
@@ -62,7 +62,7 @@ class AddListEntry extends UsersEvent {
 
 class RemoveEntry extends UsersEvent {
   String idUser;
-  String date;
+  DateTime date;
   RemoveEntry({
     required this.idUser,
     required this.date,

@@ -21,7 +21,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     required this.settingsRepository,
   }) : super(UsersInitial(
             users: const <String, String>{},
-            month: const <String>[],
+            month: const <DateTime>[],
             entries: const <List<String>>[])) {
     on<_CreateUsers>(_createUsers);
     on<AddUser>(_addUser);
@@ -50,7 +50,6 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
 
     var mapUsers = <String, String>{};
     var months = <DateTime>[];
-    var listMonth = <String>[];
     var entries = <List<String>>[];
     for (var user in users) {
       mapUsers[user.id] = user.name;
@@ -61,24 +60,22 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       }
     }
     months.sort();
-    for (DateTime m in months) {
-      listMonth.add(DateFormat('d. MMMM yyyy', 'cs').format(m));
-    }
+
     entries = List<List<String>>.generate(users.length,
-        (index) => List<String>.generate(listMonth.length, (index) => ''));
+        (index) => List<String>.generate(months.length, (index) => ''));
     for (User user in users) {
-      for (var month in listMonth) {
-        var entry = user.listEntries.firstWhereOrNull((entry) =>
-            DateFormat('d. MMMM yyyy', 'cs').format(entry.date) == month);
+      for (var month in months) {
+        var entry =
+            user.listEntries.firstWhereOrNull((entry) => entry.date == month);
         if (entry == null) {
-          entries[users.indexOf(user)][listMonth.indexOf(month)] = '';
+          entries[users.indexOf(user)][months.indexOf(month)] = '';
         } else {
-          entries[users.indexOf(user)][listMonth.indexOf(month)] =
+          entries[users.indexOf(user)][months.indexOf(month)] =
               'nt: ${entry.nt} vt: ${entry.vt}';
         }
       }
     }
-    return [mapUsers, listMonth, entries];
+    return [mapUsers, months, entries];
   }
 
   void _addUser(AddUser event, Emitter<UsersState> emit) {

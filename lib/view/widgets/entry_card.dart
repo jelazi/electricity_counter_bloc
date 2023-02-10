@@ -1,13 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
 
 import '../../blogs/bloc_export.dart';
-import '../../localization/app_localizations.dart';
 
 class EntryCard extends StatelessWidget {
   String value;
   String idUser;
-  String date;
+  DateTime date;
   EntryCard({
     Key? key,
     required this.value,
@@ -80,7 +80,7 @@ class EntryCard extends StatelessWidget {
               color: Colors.blue,
             ),
             Text(
-              AppLocalizations.of(context).translate(text),
+              (text).tr(),
             ),
           ],
         ),

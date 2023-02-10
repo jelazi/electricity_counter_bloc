@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:electricity_counter/services/enum.dart';
 import 'package:flutter/material.dart';
 
 import '../../../blogs/bloc_export.dart';
-import '../../../localization/app_localizations.dart';
+
 import '../../widgets/edit_dialogs/add_measurement.dart';
 import '../../widgets/edit_dialogs/edit_text_dialog.dart';
 import '../../widgets/entry_card.dart';
@@ -27,8 +29,7 @@ class MeasureTableWidget extends StatelessWidget {
                 width: 200,
                 child: ListTile(
                     tileColor: Colors.red[50],
-                    title: Text(AppLocalizations.of(context)
-                        .translate('datesEnter'))))));
+                    title: Text(('datesEnter').tr())))));
         for (String id in state.users.keys) {
           headerTableEnters.add(
             NameUserCard(id: id, name: state.users[id] ?? ''),
@@ -37,18 +38,20 @@ class MeasureTableWidget extends StatelessWidget {
         var rowsTableEnters = <Widget>[];
         var numberTableEnters = 0;
         var leftHeadertableEnters = <Widget>[];
-        for (var month in state.months) {
+        for (var date in state.months) {
           var cells = <Widget>[];
           leftHeadertableEnters.add(Card(
             child: SizedBox(
-                height: 60, width: 200, child: ListTile(title: Text(month))),
+                height: 60,
+                width: 200,
+                child: ListTile(title: Text('${getNameMonth(date)}}'))),
           ));
           for (var i = 0; i < state.entries.length; i++) {
             cells.add(
               EntryCard(
-                value: state.entries[i][state.months.indexOf(month)],
+                value: state.entries[i][state.months.indexOf(date)],
                 idUser: state.users.keys.elementAt(i),
-                date: month,
+                date: date,
               ),
             );
           }
@@ -67,8 +70,7 @@ class MeasureTableWidget extends StatelessWidget {
               children: [
                 ElevatedButton.icon(
                     onPressed: () {
-                      String title =
-                          AppLocalizations.of(context).translate('addUser');
+                      String title = ('addUser').tr();
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -82,12 +84,10 @@ class MeasureTableWidget extends StatelessWidget {
                           });
                     },
                     icon: const Icon(Icons.person),
-                    label: Text(
-                        AppLocalizations.of(context).translate('addUser'))),
+                    label: Text(('addUser').tr())),
                 ElevatedButton.icon(
                     onPressed: () {
-                      String title =
-                          AppLocalizations.of(context).translate('addEntry');
+                      String title = ('addEntry').tr();
 
                       showDialog(
                           context: context,
@@ -102,8 +102,7 @@ class MeasureTableWidget extends StatelessWidget {
                           });
                     },
                     icon: const Icon(Icons.note),
-                    label: Text(
-                        AppLocalizations.of(context).translate('addEnter')))
+                    label: Text(('addEnter').tr()))
               ],
             ),
             SizedBox(

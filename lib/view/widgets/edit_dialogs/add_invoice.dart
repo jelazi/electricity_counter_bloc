@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +8,6 @@ import 'package:electricity_counter/blogs/bloc_export.dart';
 import 'package:electricity_counter/blogs/notification_bloc/notification_bloc.dart';
 import 'package:electricity_counter/view/widgets/edit_dialogs/edit_dialog.dart';
 
-import '../../../localization/app_localizations.dart';
 import '../../../models/invoice.dart';
 
 class AddInvoiceDialog extends StatefulWidget {
@@ -26,18 +26,18 @@ class AddInvoiceDialog extends StatefulWidget {
     required this.context,
   }) : super(key: key) {
     listMonths = [
-      AppLocalizations.of(context).translate('january'),
-      AppLocalizations.of(context).translate('february'),
-      AppLocalizations.of(context).translate('march'),
-      AppLocalizations.of(context).translate('april'),
-      AppLocalizations.of(context).translate('mai'),
-      AppLocalizations.of(context).translate('june'),
-      AppLocalizations.of(context).translate('july'),
-      AppLocalizations.of(context).translate('august'),
-      AppLocalizations.of(context).translate('september'),
-      AppLocalizations.of(context).translate('october'),
-      AppLocalizations.of(context).translate('november'),
-      AppLocalizations.of(context).translate('december'),
+      ('january').tr(),
+      ('february').tr(),
+      ('march').tr(),
+      ('april').tr(),
+      ('mai').tr(),
+      ('june').tr(),
+      ('july').tr(),
+      ('august').tr(),
+      ('september').tr(),
+      ('october').tr(),
+      ('november').tr(),
+      ('december').tr(),
     ];
     var currentYear = DateTime.now().year;
     var currentMonth = DateTime.now().month;
@@ -86,7 +86,7 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
             children: [
               Row(
                 children: [
-                  Text(AppLocalizations.of(context).translate('month')),
+                  Text(('month').tr()),
                   SizedBox(
                     width: 100,
                     child: DropdownButton(
@@ -109,7 +109,7 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
               ),
               Row(
                 children: [
-                  Text(AppLocalizations.of(context).translate('year')),
+                  Text(('year').tr()),
                   SizedBox(
                     width: 100,
                     child: DropdownButton(
@@ -144,8 +144,7 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                        '${AppLocalizations.of(context).translate('fixRate')}: '),
+                    Text('${('fixRate').tr()}: '),
                     Row(
                       children: [
                         SizedBox(
@@ -170,8 +169,7 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                        '${AppLocalizations.of(context).translate('floatingRateNT')}: '),
+                    Text('${('floatingRateNT').tr()}: '),
                     Row(
                       children: [
                         SizedBox(
@@ -196,8 +194,7 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                        '${AppLocalizations.of(context).translate('floatingRateVT')}: '),
+                    Text('${('floatingRateVT').tr()}: '),
                     Row(
                       children: [
                         SizedBox(
@@ -230,13 +227,13 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
   List checkInputs() {
     var list = [];
     if (ntController.text.isEmpty) {
-      list.add(AppLocalizations.of(context).translate('floatingRateNT'));
+      list.add(('floatingRateNT').tr());
     }
     if (vtController.text.isEmpty) {
-      list.add(AppLocalizations.of(context).translate('floatingRateVT'));
+      list.add(('floatingRateVT').tr());
     }
     if (fixController.text.isEmpty) {
-      list.add(AppLocalizations.of(context).translate('fixRate'));
+      list.add(('fixRate').tr());
     }
     return list;
   }

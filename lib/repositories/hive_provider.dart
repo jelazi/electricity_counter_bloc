@@ -14,7 +14,7 @@ class HiveProvider {
   Future<void> initBoxes() async {
     _settingsBox = await Hive.openBox('settingsBox');
     _usersBox = await Hive.openBox<User>("usersBox");
-    _invoiceBox = await Hive.openBox<User>("invoiceBox");
+    _invoiceBox = await Hive.openBox<Invoice>("invoiceBox");
   }
 
   dynamic getValue(TypeSettingsValue typeSettingsValue) {
