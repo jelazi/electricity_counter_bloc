@@ -37,11 +37,13 @@ void main(List<String> args) async {
   InvoicesRepository invoicesRepository =
       InvoicesRepository(settingsRepository: settingsRepository);
   await invoicesRepository.initInvoices();
+
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('en'), Locale('cs')],
+      startLocale: Locale('cs'),
+      supportedLocales: [Locale('cs'), Locale('en')],
       path: 'assets/lang',
-      fallbackLocale: Locale('en'),
+      fallbackLocale: Locale('cs'),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(

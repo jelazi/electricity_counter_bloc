@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:electricity_counter/models/entry.dart';
 import 'package:electricity_counter/repositories/settings_repository.dart';
 import 'package:electricity_counter/services/enum.dart';
@@ -35,6 +36,18 @@ class UsersRepository {
     return users.firstWhereOrNull((element) => element.name == name);
   }
 
+  List<Entry> getListEntriesByDate(DateTime date) {
+    var list = <Entry>[];
+    for (var user in users) {
+      for (var entry in user.listEntries) {
+        if (entry.date.year == date.year && entry.date.month == date.month) {
+          list.add(entry);
+        }
+      }
+    }
+    return list;
+  }
+
   Entry? getEntry(String idUser, DateTime date) {
     for (var user in users) {
       if (user.id == idUser) {
@@ -51,7 +64,7 @@ class UsersRepository {
   User? createNewUser(String name) {
     if (users.firstWhereOrNull((element) => element.name == name) != null) {
       FLog.warning(text: 'this user name is already in use');
-      _errorMessageController.add('this user name is already in use');
+      _errorMessageController.add(('userExists').tr());
       return null;
     }
     var uuid = const Uuid();

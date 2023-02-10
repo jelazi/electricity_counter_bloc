@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:electricity_counter/view/desktop/pages/invoice_page.dart';
+import 'package:electricity_counter/view/desktop/pages/result_page.dart';
 import 'package:electricity_counter/view/desktop/tables/table_invoices.dart';
+import 'package:electricity_counter/view/widgets/edit_dialogs/select_date_dialog.dart';
 import 'package:flutter/material.dart';
 
 import '../../../blogs/bloc_export.dart';
@@ -92,17 +93,31 @@ class InvoiceTableWidget extends StatelessWidget {
                             );
                           });
                     },
-                    icon: Icon(Icons.inventory),
+                    icon: const Icon(Icons.inventory),
                     label: Text(('addInvoice').tr())),
                 ElevatedButton.icon(
-                    onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const InvoicesPage()),
-                      );
+                    onPressed: () {
+                      String title = ('sumResult').tr();
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SelectDateDialog(
+                              title: title,
+                              okClick: (invoice, listEntry) {
+                                Navigator.of(context).pop();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ResultPage(
+                                            invoice: invoice,
+                                            listEntries: listEntry,
+                                          )),
+                                );
+                              },
+                            );
+                          });
                     },
-                    icon: Icon(Icons.summarize),
+                    icon: const Icon(Icons.summarize),
                     label: Text(('sumResult').tr())),
               ],
             )

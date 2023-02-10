@@ -87,7 +87,7 @@ class MeasureTableWidget extends StatelessWidget {
                     label: Text(('addUser').tr())),
                 ElevatedButton.icon(
                     onPressed: () {
-                      String title = ('addEntry').tr();
+                      String title = ('addEnter').tr();
 
                       showDialog(
                           context: context,

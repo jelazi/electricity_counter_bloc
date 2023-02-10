@@ -224,7 +224,7 @@ class _AddMeasurementDialogState extends State<AddMeasurementDialog> {
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.03,
+                              width: MediaQuery.of(context).size.width * 0.1,
                               child: TextField(
                                 keyboardType:
                                     const TextInputType.numberWithOptions(

@@ -23,6 +23,20 @@
     "emptyData": "Empty data: ",
     "month": "Month: ",
     "year": "Year: ",
+    "result": "Results for: ",
     "addInvoice": "Add Invoice",
-    "sumResult": "Sum Invoice"
+    "sumResult": "Sum Invoice",
+    "noCorrectDateInvoice": "The Invoice with this date isnt created.",
+    "noEntriesThisDate": "There is not entry of this date.",
+    "userExists": "This user name is already in use.",   
+    "name" : "Name",
+    "ntEntry" : "Nt naměřené",
+    "percentNtEntry" : "Procento NT",
+    "priceNt" : "NT fa. dle poměru",
+    "vtEntry" : "VT naměřené",
+    "percentVtEntry" : "Procento VT",
+    "priceVt" : "VT fa. dle poměru",
+    "fixPrice" : "Pevná část",
+    "sumPrice" : "Celkem zaplatí",
+    "ratioNtVt" : "Poměr NT a VT"
 }

@@ -23,7 +23,21 @@
     "emptyData": "Prázdná data: ",
     "month": "Měsíc: ",
     "year": "Rok: ",
+    "result": "Výsledky pro: ",
     "addInvoice": "Přidat fakturu",
-    "sumResult": "Spočítat fakturu"
+    "sumResult": "Spočítat fakturu",
+    "noCorrectDateInvoice": "Faktura tohoto data není vytvořena",
+    "noEntriesThisDate": "Nemáme ani jeden záznam z elektroměrů v tomto datu.",
+    "userExists": "Toto jméno již nějaký uživatel má.",
+    "name" : "Jméno",
+    "ntEntry" : "Nt naměřené",
+    "percentNtEntry" : "Procento NT",
+    "priceNt" : "NT fa. dle poměru",
+    "vtEntry" : "VT naměřené",
+    "percentVtEntry" : "Procento VT",
+    "priceVt" : "VT fa. dle poměru",
+    "fixPrice" : "Pevná část",
+    "sumPrice" : "Celkem zaplatí",
+    "ratioNtVt" : "Poměr NT a VT"
 
 }
