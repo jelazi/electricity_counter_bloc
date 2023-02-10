@@ -19,13 +19,21 @@ class _InitInvoices extends InvoicesEvent {
 }
 
 class NewInvoice extends InvoicesEvent {
-  Invoice invoice;
+  int month;
+  int year;
+  double fixRate;
+  double floatingNt;
+  double floatingVT;
   NewInvoice({
-    required this.invoice,
+    required this.month,
+    required this.year,
+    required this.fixRate,
+    required this.floatingNt,
+    required this.floatingVT,
   });
 
   @override
-  List<Object> get props => [invoice];
+  List<Object> get props => [fixRate, floatingNt, floatingVT, month, year];
 }
 
 class UpdateInvoice extends InvoicesEvent {

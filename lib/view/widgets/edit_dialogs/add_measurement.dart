@@ -11,28 +11,14 @@ import '../../../localization/app_localizations.dart';
 
 class AddMeasurementDialog extends StatefulWidget {
   String title;
-  String cancelLabel;
-  String okLabel;
+
   Map<String, String> users;
   Function okClick;
-  String month;
-  String year;
+
   final ntEditingControllers = <TextEditingController>[];
   final vtEditingControllers = <TextEditingController>[];
-  var listMonths = [
-    'Leden',
-    'Únor',
-    'Březen',
-    'Duben',
-    'Květen',
-    'Červen',
-    'Červenec',
-    'Srpen',
-    'Září',
-    'Říjen',
-    'Listopad',
-    'Prosinec',
-  ];
+  BuildContext context;
+  var listMonths = <String>[];
   var listYears = <String>[];
   var selectedMonth = '';
   var selectedYear = '';
@@ -40,12 +26,9 @@ class AddMeasurementDialog extends StatefulWidget {
   AddMeasurementDialog({
     Key? key,
     required this.title,
-    required this.cancelLabel,
-    required this.okLabel,
     required this.users,
     required this.okClick,
-    required this.month,
-    required this.year,
+    required this.context,
   }) : super(key: key) {
     for (var user in users.entries) {
       TextEditingController ntController = TextEditingController();
@@ -53,6 +36,20 @@ class AddMeasurementDialog extends StatefulWidget {
       ntEditingControllers.add(ntController);
       vtEditingControllers.add(vtController);
     }
+    listMonths = [
+      AppLocalizations.of(context).translate('january'),
+      AppLocalizations.of(context).translate('february'),
+      AppLocalizations.of(context).translate('march'),
+      AppLocalizations.of(context).translate('april'),
+      AppLocalizations.of(context).translate('mai'),
+      AppLocalizations.of(context).translate('june'),
+      AppLocalizations.of(context).translate('july'),
+      AppLocalizations.of(context).translate('august'),
+      AppLocalizations.of(context).translate('september'),
+      AppLocalizations.of(context).translate('october'),
+      AppLocalizations.of(context).translate('november'),
+      AppLocalizations.of(context).translate('december'),
+    ];
     var currentYear = DateTime.now().year;
     var currentMonth = DateTime.now().month;
     listYears =
@@ -89,8 +86,9 @@ class _AddMeasurementDialogState extends State<AddMeasurementDialog> {
           index++;
         }
         if (errors.isNotEmpty) {
-          context.read<NotificationBloc>().add(
-              CreateMessage(message: 'Prázdná data: ${errors.join(", ")}'));
+          context.read<NotificationBloc>().add(CreateMessage(
+              message: AppLocalizations.of(context).translate('emptyData') +
+                  errors.join(", ")));
         } else {
           var list = <List<String>>[];
           list.add(widget.users.values.toList());
@@ -112,152 +110,148 @@ class _AddMeasurementDialogState extends State<AddMeasurementDialog> {
         }
       },
       title: widget.title,
-      height: MediaQuery.of(context).size.height * 0.6,
-      width: MediaQuery.of(context).size.width * 0.6,
-      widgetContent: Container(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Row(
-                  children: [
-                    Text('Měsíc: '),
-                    SizedBox(
-                      width: 100,
-                      child: DropdownButton(
-                        items: widget.listMonths
-                            .map((e) => DropdownMenuItem(
-                                  value: e,
-                                  child: Text(e),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          FLog.debug(text: 'value: $value');
-                          setState(() {
-                            widget.selectedMonth = value ?? 'Leden';
-                          });
-                        },
-                        value: widget.selectedMonth,
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('Rok: '),
-                    SizedBox(
-                      width: 100,
-                      child: DropdownButton(
-                        items: widget.listYears
-                            .map((e) => DropdownMenuItem(
-                                  value: e,
-                                  child: Text(e),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          FLog.debug(text: 'value: $value');
-                          setState(() {
-                            widget.selectedYear = value ?? widget.selectedYear;
-                          });
-                        },
-                        value: widget.selectedYear,
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              padding: EdgeInsets.all(20),
-              height: MediaQuery.of(context).size.height * 0.40,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: widget.users.entries.map((entry) {
-                    index++;
-                    return Align(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            entry.value,
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Text(
-                                'NT: ',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.1,
-                                child: TextField(
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                          decimal: true),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp('[0-9.,]')),
-                                  ],
-                                  controller:
-                                      widget.ntEditingControllers[index],
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text('kVh'),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.1,
-                              ),
-                              Text(
-                                'VT: ',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.1,
-                                child: TextField(
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                          decimal: true),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp('[0-9.,]')),
-                                  ],
-                                  controller:
-                                      widget.vtEditingControllers[index],
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text('kVh'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                ),
+      height: MediaQuery.of(context).size.height * 0.8,
+      width: MediaQuery.of(context).size.width * 0.8,
+      widgetContent: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Row(
+                children: [
+                  Text(AppLocalizations.of(context).translate('month')),
+                  SizedBox(
+                    width: 100,
+                    child: DropdownButton(
+                      items: widget.listMonths
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        FLog.debug(text: 'value: $value');
+                        setState(() {
+                          widget.selectedMonth = value ?? 'Leden';
+                        });
+                      },
+                      value: widget.selectedMonth,
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
+              Row(
+                children: [
+                  Text(AppLocalizations.of(context).translate('year')),
+                  SizedBox(
+                    width: 100,
+                    child: DropdownButton(
+                      items: widget.listYears
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        FLog.debug(text: 'value: $value');
+                        setState(() {
+                          widget.selectedYear = value ?? widget.selectedYear;
+                        });
+                      },
+                      value: widget.selectedYear,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            height: MediaQuery.of(context).size.height * 0.40,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: widget.users.entries.map((entry) {
+                  index++;
+                  return Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          entry.value,
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05,
+                            ),
+                            Text(
+                              'NT: ',
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.1,
+                              child: TextField(
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                        decimal: true),
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp('[0-9.,]')),
+                                ],
+                                controller: widget.ntEditingControllers[index],
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.03,
+                            ),
+                            Text('kVh'),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05,
+                            ),
+                            Text(
+                              'VT: ',
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.03,
+                              child: TextField(
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                        decimal: true),
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp('[0-9.,]')),
+                                ],
+                                controller: widget.vtEditingControllers[index],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Text('kVh'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

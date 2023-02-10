@@ -50,11 +50,11 @@ class EditDialog extends StatelessWidget {
         width: width,
         child: Column(children: [
           const SizedBox(
-            height: 30,
+            height: 20,
           ),
           widgetContent,
           const SizedBox(
-            height: 30,
+            height: 20,
           ),
           Center(
             child: Row(

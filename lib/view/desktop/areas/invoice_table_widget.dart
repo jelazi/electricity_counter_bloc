@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../localization/app_localizations.dart';
 import '../../../blogs/bloc_export.dart';
+import '../../widgets/edit_dialogs/add_invoice.dart';
 
 class InvoiceTableWidget extends StatelessWidget {
   const InvoiceTableWidget({super.key});
@@ -52,7 +53,20 @@ class InvoiceTableWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      String title =
+                          AppLocalizations.of(context).translate('addInvoice');
+
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AddInvoiceDialog(
+                              context: context,
+                              title: title,
+                              okClick: (listEntries) {},
+                            );
+                          });
+                    },
                     icon: Icon(Icons.inventory),
                     label: Text(
                         AppLocalizations.of(context).translate('addInvoice'))),

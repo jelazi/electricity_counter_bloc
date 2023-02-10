@@ -7,6 +7,23 @@
     "itemsInvoices": "Položky faktury",
     "fixRate" : "Fixní částka",
     "floatingRateNT" : "Pohyblivá částka NT",
-    "floatingRateVT" : "Pohyblivá částka VT"
+    "floatingRateVT" : "Pohyblivá částka VT",
+    "january" : "Leden",
+    "february" : "Únor",
+    "march" : "Březen",
+    "april" : "Duben",
+    "mai" : "Květen",
+    "june" : "Červen",
+    "july" : "Červenec",
+    "august" : "Srpen",
+    "september" : "Září",
+    "october" : "Říjen",
+    "november" : "Listopad",
+    "december" : "Prosinec",
+    "emptyData": "Prázdná data: ",
+    "month": "Měsíc: ",
+    "year": "Rok: ",
+    "addInvoice": "Přidat fakturu",
+    "sumResult": "Spočítat fakturu"
 
 }

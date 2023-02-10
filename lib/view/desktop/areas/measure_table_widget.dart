@@ -60,7 +60,7 @@ class MeasureTableWidget extends StatelessWidget {
         return Column(
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.03,
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -93,16 +93,11 @@ class MeasureTableWidget extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) {
                             return AddMeasurementDialog(
+                              context: context,
                               title: title,
-                              cancelLabel: AppLocalizations.of(context)
-                                  .translate('cancel'),
-                              okLabel:
-                                  AppLocalizations.of(context).translate('ok'),
                               users:
                                   context.read<UsersBloc>().getCurrentUsers(),
                               okClick: (listEntries) {},
-                              month: 'month',
-                              year: 'year',
                             );
                           });
                     },
@@ -112,7 +107,7 @@ class MeasureTableWidget extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.03,
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             TableEnters(
                 number: numberTableEnters,
