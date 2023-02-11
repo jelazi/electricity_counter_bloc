@@ -44,7 +44,7 @@ class MeasureTableWidget extends StatelessWidget {
             child: SizedBox(
                 height: 60,
                 width: 200,
-                child: ListTile(title: Text('${getNameMonth(date)}}'))),
+                child: ListTile(title: Text(getNameMonth(date)))),
           ));
           for (var i = 0; i < state.entries.length; i++) {
             cells.add(

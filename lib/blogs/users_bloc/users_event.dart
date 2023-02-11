@@ -35,15 +35,17 @@ class RemoveUser extends UsersEvent {
 class AddEntry extends UsersEvent {
   String idUser;
   DateTime date;
-  String value;
+  double nt;
+  double vt;
   AddEntry({
     required this.idUser,
     required this.date,
-    required this.value,
+    required this.nt,
+    required this.vt,
   });
 
   @override
-  List<Object> get props => [idUser, date, value];
+  List<Object> get props => [idUser, date, nt, vt];
 }
 
 class AddListEntry extends UsersEvent {

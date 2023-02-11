@@ -105,9 +105,14 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     final state = this.state;
     Entry? entry = usersRepository.getEntry(event.idUser, event.date);
     if (entry == null) {
-      return;
+      entry = Entry(
+          date: event.date, idUser: event.idUser, nt: event.nt, vt: event.vt);
+      usersRepository.addEntry(entry);
+    } else {
+      Entry newEntry = entry.copyWith(nt: event.nt, vt: event.vt);
+      usersRepository.addEntry(newEntry);
     }
-    usersRepository.addEntry(entry);
+
     var list = _generateUserTableData();
     emit(state.copyWith(
       users: list[0],
