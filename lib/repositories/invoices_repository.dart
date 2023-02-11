@@ -47,8 +47,17 @@ class InvoicesRepository {
     settingsRepository.saveInvoice(invoice);
   }
 
-  void deleteInvoice() {}
-  void updateInvoice() {}
+  void deleteInvoice(Invoice invoice) {
+    listInvoices.removeWhere((element) => element.id == invoice.id);
+    settingsRepository.removeInvoice(invoice);
+  }
+
+  void updateInvoice(Invoice invoice) {
+    listInvoices.insert(
+        listInvoices.indexWhere((element) => element.id == invoice.id),
+        invoice);
+    settingsRepository.saveInvoice(invoice);
+  }
 
   Invoice? getInvoiceByDate(DateTime dateTime) {
     for (var invoice in listInvoices) {
@@ -58,6 +67,10 @@ class InvoicesRepository {
       }
     }
     return null;
+  }
+
+  Invoice? getInvoiceById(String id) {
+    return listInvoices.firstWhereOrNull((element) => element.id == id);
   }
 
   Result sumResult(Invoice invoice, List<Entry> listEntries,

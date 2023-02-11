@@ -36,8 +36,7 @@ class TableEnters extends StatelessWidget {
               height: 1.0,
               thickness: 2.0,
             ),
-            leftHandSideColBackgroundColor:
-                const Color.fromARGB(255, 177, 229, 126),
+            leftHandSideColBackgroundColor: Colors.white10,
             rightHandSideColBackgroundColor: const Color(0xFFFFFFFF),
           ),
         ));

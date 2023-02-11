@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../../../blogs/bloc_export.dart';
 import '../../widgets/edit_dialogs/add_invoice.dart';
+import '../../widgets/invoice_card.dart';
 
 class InvoiceTableWidget extends StatelessWidget {
   const InvoiceTableWidget({super.key});
@@ -28,10 +29,10 @@ class InvoiceTableWidget extends StatelessWidget {
                 )),
           ));
           for (String id in state.invoices.keys) {
-            headerTableInvoices.add(Card(
-                child: SizedBox(
-                    width: 210,
-                    child: ListTile(title: Text(state.invoices[id] ?? '')))));
+            headerTableInvoices.add(InvoiceCard(
+              text: state.invoices[id] ?? '',
+              idInvoice: id,
+            ));
           }
           var rowsTableInvoices = <Widget>[];
           var numberTableInvoices = headerTableInvoices.length;

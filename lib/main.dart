@@ -9,10 +9,12 @@ import 'package:electricity_counter/repositories/users_repository.dart';
 import 'package:electricity_counter/services/my_logger.dart';
 import 'package:electricity_counter/view/desktop/pages/home_page.dart';
 import 'package:f_logs/f_logs.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import 'blogs/bloc_export.dart';
+import 'firebase_options.dart';
 import 'models/invoice.dart';
 import 'repositories/settings_repository.dart';
 import 'view/mobile/pages/home_page.dart';
@@ -26,6 +28,9 @@ void main(List<String> args) async {
   if (Platform.isWindows || Platform.isMacOS) {
     await DesktopWindow.setMinWindowSize(const Size(800, 600));
   }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   MyLogger();
   // FLog.debug(text: 'start App');
   await initHiveFunction();

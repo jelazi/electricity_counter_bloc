@@ -53,7 +53,12 @@ class InvoicesBloc extends Bloc<InvoicesEvent, InvoicesState> {
   }
 
   void _updateInvoice(UpdateInvoice event, Emitter<InvoicesState> emit) {}
-  void _deleteInvoice(DeleteInvoice event, Emitter<InvoicesState> emit) {}
+  void _deleteInvoice(DeleteInvoice event, Emitter<InvoicesState> emit) {
+    invoicesRepository.deleteInvoice(event.invoice);
+    final state = this.state;
+    var list = _generateInvoicesTableData(context);
+    emit(state.copyWith(invoices: list[0], invoicesData: list[1]));
+  }
 
   List _generateInvoicesTableData(BuildContext context) {
     final listInvoices = invoicesRepository.listInvoices;

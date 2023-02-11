@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:electricity_counter/view/widgets/edit_dialogs/question_dialog.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
 
@@ -42,10 +43,18 @@ class EntryCard extends StatelessWidget {
               }));
               items
                   .add(getMenuItemWithIcon(context, 'delete', Icons.delete, () {
-                context.read<UsersBloc>().add(RemoveEntry(
-                      idUser: idUser,
-                      date: date,
-                    ));
+                Future.delayed(Duration.zero, () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => QuestionDialog(
+                          title: '${'deleteEnter'.tr()} $value',
+                          okClick: () =>
+                              context.read<UsersBloc>().add(RemoveEntry(
+                                    idUser: idUser,
+                                    date: date,
+                                  )),
+                          question: '${'deleteEnterQuestion'.tr()} $value?'));
+                });
               }));
             } else {
               items.add(getMenuItemWithIcon(context, 'add', Icons.add, () {

@@ -38,6 +38,18 @@
     "priceVt" : "VT fa. dle poměru",
     "fixPrice" : "Pevná část",
     "sumPrice" : "Celkem zaplatí",
-    "ratioNtVt" : "Poměr NT a VT"
+    "ratioNtVt" : "Poměr NT a VT",
+    "view" : "Prohlížet",
+    "edit" : "Editovat",
+    "delete" : "Vymazat",
+    "deleteUser" : "Vymazání uživatele ",
+    "deleteUserQuestion" : "Chcete vymazat uživatele: ",
+    "deleteEnter" : "Vymazání záznamu ",
+    "deleteEnterQuestion" : "Chcete vymazat záznam: ",
+    "deleteInvoice" : "Vymazání faktury ",
+    "deleteInvoiceQuestion" : "Chcete vymazat fakturu: ",
+    "noInvoiceFound" : "Chyba: Faktura nenalezena.",
+    "no" : "Ne",
+    "yes" : "Ano"
 
 }
