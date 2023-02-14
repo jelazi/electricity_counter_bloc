@@ -50,5 +50,8 @@
     "deleteInvoiceQuestion" : "Do you want delete invoice: ",
     "noInvoiceFound" : "Chyba: Faktura nenalezena.",
     "no" : "No",
-    "yes" : "Yes"
+    "yes" : "Yes",
+    "sum" : "Sum: ",
+    "createPdf" : "Create Pdf",
+    "createExcel" : "Create Excel table"
 }

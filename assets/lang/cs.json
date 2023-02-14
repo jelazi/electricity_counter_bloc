@@ -50,6 +50,9 @@
     "deleteInvoiceQuestion" : "Chcete vymazat fakturu: ",
     "noInvoiceFound" : "Chyba: Faktura nenalezena.",
     "no" : "Ne",
-    "yes" : "Ano"
+    "yes" : "Ano",
+    "sum" : "Celkem: ",
+    "createPdf" : "Vytvoř Pdf",
+    "createExcel" : "Vytvoř Excel tabulku"
 
 }

@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 
 import 'package:electricity_counter/blogs/bloc_export.dart';
@@ -23,6 +23,18 @@ class ResultPage extends StatefulWidget {
   Invoice invoice;
   List<Entry> listEntries;
   var listName = <String>[];
+  var listNameValue = [
+    'name'.tr(),
+    'ntEntry'.tr(),
+    'percentNtEntry'.tr(),
+    'priceNt'.tr(),
+    'vtEntry'.tr(),
+    'percentVtEntry'.tr(),
+    'priceVt'.tr(),
+    'fixPrice'.tr(),
+    'sumPrice'.tr(),
+    'ratioNtVt'.tr(),
+  ];
 
   ResultPage({
     Key? key,
@@ -42,25 +54,26 @@ class _ResultPageState extends State<ResultPage> {
         widget.listEntries,
         context.read<InvoicesBloc>().usersRepository);
     var number = 9;
-    var header = [
-      HeaderCell(text: 'name'.tr()),
-      HeaderCell(text: 'ntEntry'.tr()),
-      HeaderCell(text: 'percentNtEntry'.tr()),
-      HeaderCell(text: 'priceNt'.tr()),
-      HeaderCell(text: 'vtEntry'.tr()),
-      HeaderCell(text: 'percentVtEntry'.tr()),
-      HeaderCell(text: 'priceVt'.tr()),
-      HeaderCell(text: 'fixPrice'.tr()),
-      HeaderCell(text: 'sumPrice'.tr()),
-      HeaderCell(text: 'ratioNtVt'.tr()),
-    ];
+    var header = widget.listNameValue.map((e) => HeaderCell(text: e)).toList();
     var leftHeader = List<Widget>.generate(result.listName.length,
         (index) => LeftHeaderCell(text: result.listName[index]));
+    leftHeader.add(LeftHeaderCell(
+      text: 'sum'.tr(),
+      color: Colors.red[200],
+    ));
     var rows = <Widget>[];
+    List<double> listSum = List<double>.generate(8, (index) => 0);
 
     for (var row in result.listData) {
       var items = <Widget>[];
-
+      listSum[0] += row[0];
+      listSum[1] += row[1];
+      listSum[2] += row[2];
+      listSum[3] += row[3];
+      listSum[4] += row[4];
+      listSum[5] += row[8];
+      listSum[6] += row[6];
+      listSum[7] += row[7];
       items.add(RowCell(text: '${row[0]} kWh'));
       items.add(RowCell(text: '${row[1].toStringAsFixed(1)} %'));
       items.add(RowCell(text: '${row[2].toStringAsFixed(1)} Kč'));
@@ -82,8 +95,43 @@ class _ResultPageState extends State<ResultPage> {
           children: items,
         ),
       ));
-      var lastItems = <Widget>[];
     }
+    rows.add(SizedBox(
+        child: Row(children: [
+      RowCell(
+        text: '${listSum[0]} kWh',
+        color: Colors.red[200],
+      ),
+      RowCell(
+        text: '${listSum[1].toStringAsFixed(1)} %',
+        color: Colors.red[200],
+      ),
+      RowCell(
+        text: '${listSum[2].toStringAsFixed(1)} Kč',
+        color: Colors.red[200],
+      ),
+      RowCell(
+        text: '${listSum[3]} kWh',
+        color: Colors.red[200],
+      ),
+      RowCell(
+        text: '${listSum[4].toStringAsFixed(1)} %',
+        color: Colors.red[200],
+      ),
+      RowCell(
+        text: '${listSum[5].toStringAsFixed(2)} Kč',
+        color: Colors.red[200],
+      ),
+      RowCell(
+        text: '${listSum[6].toStringAsFixed(2)} Kč',
+        color: Colors.red[200],
+      ),
+      RowCell(
+        text: '${listSum[7].toStringAsFixed(2)} Kč',
+        color: Colors.red[200],
+      ),
+      RowCell(text: ''),
+    ])));
 
     return Scaffold(
         appBar: AppBar(
@@ -92,7 +140,7 @@ class _ResultPageState extends State<ResultPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Align(
@@ -128,7 +176,10 @@ class _ResultPageState extends State<ResultPage> {
               children: [
                 ElevatedButton(
                     onPressed: () async {
-                      String pdfPath = await makePdf(context);
+                      String pdfPath = await makePdf(
+                        context,
+                        widget.listNameValue,
+                      );
                       if (pdfPath.isNotEmpty) {
                         Navigator.push(
                           context,
@@ -149,7 +200,7 @@ class _ResultPageState extends State<ResultPage> {
   }
 }
 
-Future<String> makePdf(BuildContext context) async {
+Future<String> makePdf(BuildContext context, List listNameValue) async {
   var listEntry = context.read<UsersBloc>().currentListEntry;
   var invoice = context.read<InvoicesBloc>().currentInvoice;
   final result = context.read<InvoicesBloc>().invoicesRepository.sumResult(
@@ -166,41 +217,31 @@ Future<String> makePdf(BuildContext context) async {
   );
   var tableRow = <pw.TableRow>[];
 
-  var header = pw.TableRow(children: [
-    getHeaderCell('name'.tr()),
-    getHeaderCell('ntEntry'.tr()),
-    getHeaderCell('percentNtEntry'.tr()),
-    getHeaderCell('priceNt'.tr()),
-    getHeaderCell('vtEntry'.tr()),
-    getHeaderCell('percentVtEntry'.tr()),
-    getHeaderCell('priceVt'.tr()),
-    getHeaderCell('fixPrice'.tr()),
-    getHeaderCell('sumPrice'.tr()),
-    getHeaderCell('ratioNtVt'.tr()),
-  ]);
+  var header = pw.TableRow(
+      children: listNameValue.map((e) => getPdfHeaderCell(e)).toList());
 
   tableRow.add(header);
 
   var leftHeader = List<pw.Container>.generate(
-      result.listName.length, (index) => getLeftHeaderCell(result, index));
+      result.listName.length, (index) => getPdfLeftHeaderCell(result, index));
   var listTableRow = List<List<Widget>>.generate(leftHeader.length,
       (index) => List<Widget>.generate(10, (j) => Container()));
 
   for (var row in result.listData) {
     var items = <pw.Container>[];
-    items.add(getLeftHeaderCell(result, result.listData.indexOf(row)));
-    items.add(getTableCell(text: '${row[0]} kWh'));
-    items.add(getTableCell(text: '${row[1].toStringAsFixed(1)} %'));
-    items.add(getTableCell(text: '${row[2].toStringAsFixed(1)} Kč'));
-    items.add(getTableCell(text: '${row[3]} kWh'));
-    items.add(getTableCell(text: '${row[4].toStringAsFixed(1)} %'));
-    items.add(getTableCell(text: '${row[5].toStringAsFixed(2)} Kč'));
-    items.add(getTableCell(text: '${row[6].toStringAsFixed(2)} Kč'));
-    items.add(getTableCell(
+    items.add(getPdfLeftHeaderCell(result, result.listData.indexOf(row)));
+    items.add(getPdfTableCell(text: '${row[0]} kWh'));
+    items.add(getPdfTableCell(text: '${row[1].toStringAsFixed(1)} %'));
+    items.add(getPdfTableCell(text: '${row[2].toStringAsFixed(1)} Kč'));
+    items.add(getPdfTableCell(text: '${row[3]} kWh'));
+    items.add(getPdfTableCell(text: '${row[4].toStringAsFixed(1)} %'));
+    items.add(getPdfTableCell(text: '${row[5].toStringAsFixed(2)} Kč'));
+    items.add(getPdfTableCell(text: '${row[6].toStringAsFixed(2)} Kč'));
+    items.add(getPdfTableCell(
       text: '${row[7].toStringAsFixed(2)} Kč',
       color: PdfColors.green100,
     ));
-    items.add(getTableCell(
+    items.add(getPdfTableCell(
         text: '${row[8].toStringAsFixed(1)}% / ${row[9].toStringAsFixed(1)}%'));
     tableRow.add(pw.TableRow(children: items));
   }
@@ -223,7 +264,7 @@ Future<String> makePdf(BuildContext context) async {
   return file.path;
 }
 
-pw.Container getTableCell({required String text, PdfColor? color}) {
+pw.Container getPdfTableCell({required String text, PdfColor? color}) {
   var fontSize = 6.0;
   return pw.Container(
       padding: pw.EdgeInsets.all(2),
@@ -237,7 +278,7 @@ pw.Container getTableCell({required String text, PdfColor? color}) {
       ));
 }
 
-pw.Container getLeftHeaderCell(Result result, int index) {
+pw.Container getPdfLeftHeaderCell(Result result, int index) {
   var fontSize = 6.0;
   return pw.Container(
       padding: pw.EdgeInsets.all(2),
@@ -251,7 +292,7 @@ pw.Container getLeftHeaderCell(Result result, int index) {
       ));
 }
 
-pw.Container getHeaderCell(String text) {
+pw.Container getPdfHeaderCell(String text) {
   var fontSize = 6.0;
   return pw.Container(
       padding: pw.EdgeInsets.all(2),
@@ -267,9 +308,11 @@ pw.Container getHeaderCell(String text) {
 
 class LeftHeaderCell extends StatelessWidget {
   String text;
+  Color? color;
   LeftHeaderCell({
     super.key,
     required this.text,
+    this.color,
   });
 
   @override
@@ -277,7 +320,8 @@ class LeftHeaderCell extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(3.0),
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey), color: Colors.yellow),
+            border: Border.all(color: Colors.grey),
+            color: color ?? Colors.yellow),
         width: 150,
         height: 40,
         child: Text(
