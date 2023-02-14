@@ -52,6 +52,8 @@ class MeasureTableWidget extends StatelessWidget {
                 value: state.entries[i][state.months.indexOf(date)],
                 idUser: state.users.keys.elementAt(i),
                 date: date,
+                nt: state.nts[i][state.months.indexOf(date)],
+                vt: state.vts[i][state.months.indexOf(date)],
               ),
             );
           }
@@ -62,6 +64,14 @@ class MeasureTableWidget extends StatelessWidget {
         }
         return Column(
           children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            TableEnters(
+                number: numberTableEnters,
+                header: headerTableEnters,
+                leftHeader: leftHeadertableEnters,
+                rows: rowsTableEnters),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
@@ -105,14 +115,6 @@ class MeasureTableWidget extends StatelessWidget {
                     label: Text(('addEnter').tr()))
               ],
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            TableEnters(
-                number: numberTableEnters,
-                header: headerTableEnters,
-                leftHeader: leftHeadertableEnters,
-                rows: rowsTableEnters),
           ],
         );
       }),

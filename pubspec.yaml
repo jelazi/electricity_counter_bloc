@@ -34,6 +34,13 @@ dependencies:
   easy_localization: ^3.0.1
   firebase_core: ^2.5.0
   cloud_firestore: ^4.3.2
+  pdf: ^3.9.0
+  pdfx: 2.2.0
+  file_picker: ^5.2.5
+  flutter_share: ^2.0.0
+  share_plus: ^6.3.1
+  google_fonts: ^4.0.3
+  printing: ^5.10.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -46,3 +53,4 @@ flutter:
   assets:
     - assets/lang/cs.json
     - assets/lang/en.json
+    - assets/fonts/

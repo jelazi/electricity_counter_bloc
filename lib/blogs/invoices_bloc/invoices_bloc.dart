@@ -20,6 +20,7 @@ class InvoicesBloc extends Bloc<InvoicesEvent, InvoicesState> {
   SettingsRepository settingsRepository;
   InvoicesRepository invoicesRepository;
   BuildContext context;
+  Invoice? currentInvoice;
 
   InvoicesBloc({
     required this.usersRepository,

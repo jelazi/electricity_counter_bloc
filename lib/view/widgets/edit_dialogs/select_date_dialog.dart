@@ -63,6 +63,8 @@ class _SelectDateDialogState extends State<SelectDateDialog> {
               .getListEntriesByDate(date);
           if (invoice != null) {
             if (listEntry.isNotEmpty) {
+              context.read<InvoicesBloc>().currentInvoice = invoice;
+              context.read<UsersBloc>().currentListEntry = listEntry;
               widget.okClick(
                 invoice,
                 listEntry,

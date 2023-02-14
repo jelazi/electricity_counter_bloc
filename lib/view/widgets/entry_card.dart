@@ -1,8 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:easy_localization/easy_localization.dart';
-import 'package:electricity_counter/view/widgets/edit_dialogs/add_enter_dialog.dart';
-import 'package:electricity_counter/view/widgets/edit_dialogs/question_dialog.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
+
+import 'package:electricity_counter/view/widgets/edit_dialogs/add_enter_dialog.dart';
+import 'package:electricity_counter/view/widgets/edit_dialogs/question_dialog.dart';
 
 import '../../blogs/bloc_export.dart';
 import '../../models/user.dart';
@@ -11,11 +13,15 @@ class EntryCard extends StatelessWidget {
   String value;
   String idUser;
   DateTime date;
+  double? nt;
+  double? vt;
   EntryCard({
     Key? key,
     required this.value,
     required this.idUser,
     required this.date,
+    required this.nt,
+    required this.vt,
   }) : super(key: key);
 
   @override
@@ -39,10 +45,27 @@ class EntryCard extends StatelessWidget {
             if (value.isNotEmpty) {
               /*  items.add(getMenuItemWithIcon(context, 'view', Icons.preview, () {
                 FLog.debug(text: 'preview');
-              }));
-              items.add(getMenuItemWithIcon(context, 'edit', Icons.edit, () {
-                FLog.debug(text: 'edit');
               }));*/
+              items.add(getMenuItemWithIcon(context, 'edit', Icons.edit, () {
+                User? user = context
+                    .read<UsersBloc>()
+                    .usersRepository
+                    .getUserById(idUser);
+                if (user != null) {
+                  Future.delayed(Duration.zero, () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AddEnterDialog(
+                            nt: nt ?? 0,
+                            vt: vt ?? 0,
+                            month: date,
+                            user: user,
+                          );
+                        });
+                  });
+                }
+              }));
               items
                   .add(getMenuItemWithIcon(context, 'delete', Icons.delete, () {
                 Future.delayed(Duration.zero, () {

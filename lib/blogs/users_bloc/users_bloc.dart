@@ -16,13 +16,17 @@ part 'users_state.dart';
 class UsersBloc extends Bloc<UsersEvent, UsersState> {
   UsersRepository usersRepository;
   SettingsRepository settingsRepository;
+  var currentListEntry = <Entry>[];
   UsersBloc({
     required this.usersRepository,
     required this.settingsRepository,
   }) : super(UsersInitial(
-            users: const <String, String>{},
-            month: const <DateTime>[],
-            entries: const <List<String>>[])) {
+          users: const <String, String>{},
+          month: const <DateTime>[],
+          entries: const <List<String>>[],
+          nts: const <List<double?>>[],
+          vts: const <List<double?>>[],
+        )) {
     on<_CreateUsers>(_createUsers);
     on<AddUser>(_addUser);
     on<RemoveUser>(_removeUser);
@@ -41,6 +45,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       users: list[0],
       months: list[1],
       entries: list[2],
+      nts: list[3],
+      vts: list[4],
     ));
   }
 
@@ -51,6 +57,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     var mapUsers = <String, String>{};
     var months = <DateTime>[];
     var entries = <List<String>>[];
+    var vts = <List<double?>>[];
+    var nts = <List<double?>>[];
     for (var user in users) {
       mapUsers[user.id] = user.name;
       for (var entry in user.listEntries) {
@@ -63,19 +71,33 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
 
     entries = List<List<String>>.generate(users.length,
         (index) => List<String>.generate(months.length, (index) => ''));
+    nts = List<List<double?>>.generate(users.length,
+        (index) => List<double?>.generate(months.length, (index) => null));
+    vts = List<List<double?>>.generate(users.length,
+        (index) => List<double?>.generate(months.length, (index) => null));
     for (User user in users) {
       for (var month in months) {
         var entry =
             user.listEntries.firstWhereOrNull((entry) => entry.date == month);
         if (entry == null) {
           entries[users.indexOf(user)][months.indexOf(month)] = '';
+          vts[users.indexOf(user)][months.indexOf(month)] = null;
+          nts[users.indexOf(user)][months.indexOf(month)] = null;
         } else {
           entries[users.indexOf(user)][months.indexOf(month)] =
               'nt: ${entry.nt} vt: ${entry.vt}';
+          nts[users.indexOf(user)][months.indexOf(month)] = entry.nt;
+          vts[users.indexOf(user)][months.indexOf(month)] = entry.vt;
         }
       }
     }
-    return [mapUsers, months, entries];
+    return [
+      mapUsers,
+      months,
+      entries,
+      nts,
+      vts,
+    ];
   }
 
   void _addUser(AddUser event, Emitter<UsersState> emit) {
@@ -87,6 +109,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       users: list[0],
       months: list[1],
       entries: list[2],
+      nts: list[3],
+      vts: list[4],
     ));
   }
 
@@ -98,6 +122,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       users: list[0],
       months: list[1],
       entries: list[2],
+      nts: list[3],
+      vts: list[4],
     ));
   }
 
@@ -118,6 +144,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       users: list[0],
       months: list[1],
       entries: list[2],
+      nts: list[3],
+      vts: list[4],
     ));
   }
 
@@ -142,6 +170,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       users: list[0],
       months: list[1],
       entries: list[2],
+      nts: list[3],
+      vts: list[4],
     ));
   }
 
@@ -157,6 +187,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       users: list[0],
       months: list[1],
       entries: list[2],
+      nts: list[3],
+      vts: list[4],
     ));
   }
 
