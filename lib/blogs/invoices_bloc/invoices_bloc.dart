@@ -19,14 +19,12 @@ class InvoicesBloc extends Bloc<InvoicesEvent, InvoicesState> {
   UsersRepository usersRepository;
   SettingsRepository settingsRepository;
   InvoicesRepository invoicesRepository;
-  BuildContext context;
   Invoice? currentInvoice;
 
   InvoicesBloc({
     required this.usersRepository,
     required this.settingsRepository,
     required this.invoicesRepository,
-    required this.context,
   }) : super(InvoicesInitial(
           invoices: const <String, String>{},
           invoicesData: const <List<String>>[],
@@ -40,7 +38,7 @@ class InvoicesBloc extends Bloc<InvoicesEvent, InvoicesState> {
 
   void _initInvoices(_InitInvoices event, Emitter<InvoicesState> emit) {
     final state = this.state;
-    var list = _generateInvoicesTableData(context);
+    var list = _generateInvoicesTableData();
     emit(state.copyWith(invoices: list[0], invoicesData: list[1]));
   }
 
@@ -49,7 +47,7 @@ class InvoicesBloc extends Bloc<InvoicesEvent, InvoicesState> {
     DateTime date = DateTime(event.year, event.month, 1);
     invoicesRepository.newInvoice(
         date, event.fixRate, event.floatingNt, event.floatingVT);
-    var list = _generateInvoicesTableData(context);
+    var list = _generateInvoicesTableData();
     emit(state.copyWith(invoices: list[0], invoicesData: list[1]));
   }
 
@@ -57,11 +55,11 @@ class InvoicesBloc extends Bloc<InvoicesEvent, InvoicesState> {
   void _deleteInvoice(DeleteInvoice event, Emitter<InvoicesState> emit) {
     invoicesRepository.deleteInvoice(event.invoice);
     final state = this.state;
-    var list = _generateInvoicesTableData(context);
+    var list = _generateInvoicesTableData();
     emit(state.copyWith(invoices: list[0], invoicesData: list[1]));
   }
 
-  List _generateInvoicesTableData(BuildContext context) {
+  List _generateInvoicesTableData() {
     final listInvoices = invoicesRepository.listInvoices;
     var invoicesName = <String, String>{};
     var invoicesData = List.generate(3, (index) => <String>[]);

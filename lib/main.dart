@@ -45,10 +45,10 @@ void main(List<String> args) async {
 
   runApp(
     EasyLocalization(
-      startLocale: Locale('cs'),
-      supportedLocales: [Locale('cs'), Locale('en')],
+      startLocale: const Locale('cs'),
+      supportedLocales: const [Locale('cs'), Locale('en')],
       path: 'assets/lang',
-      fallbackLocale: Locale('cs'),
+      fallbackLocale: const Locale('cs'),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -58,7 +58,6 @@ void main(List<String> args) async {
           ),
           BlocProvider(
               create: ((context) => InvoicesBloc(
-                    context: context,
                     usersRepository: usersRepository,
                     settingsRepository: settingsRepository,
                     invoicesRepository: invoicesRepository,
