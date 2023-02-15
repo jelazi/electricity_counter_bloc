@@ -4,8 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:intl/intl.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import '../../models/entry.dart';
+import '../../models/measure.dart';
 import '../../models/user.dart';
 import '../../repositories/settings_repository.dart';
 import '../../repositories/users_repository.dart';
@@ -16,16 +18,19 @@ part 'users_state.dart';
 class UsersBloc extends Bloc<UsersEvent, UsersState> {
   UsersRepository usersRepository;
   SettingsRepository settingsRepository;
+  bool isDesktop;
   var currentListEntry = <Entry>[];
   UsersBloc({
     required this.usersRepository,
     required this.settingsRepository,
+    required this.isDesktop,
   }) : super(UsersInitial(
           users: const <String, String>{},
           month: const <DateTime>[],
           entries: const <List<String>>[],
           nts: const <List<double?>>[],
           vts: const <List<double?>>[],
+          listMeasure: const <Measure>[],
         )) {
     on<_CreateUsers>(_createUsers);
     on<AddUser>(_addUser);

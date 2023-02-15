@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:electricity_counter/blogs/bloc_export.dart';
-import 'package:electricity_counter/blogs/notification_bloc/notification_bloc.dart';
 import 'package:electricity_counter/view/widgets/edit_dialogs/edit_dialog.dart';
 
 import '../../../models/invoice.dart';
@@ -57,7 +56,6 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
   TextEditingController vtController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    int index = -1;
     return EditDialog(
       okBack: false,
       okClick: () {
@@ -132,89 +130,113 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             height: MediaQuery.of(context).size.height * 0.3,
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('${('fixRate').tr()}: '),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          child: TextField(
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp('[0-9.,]')),
-                            ],
-                            controller: fixController,
+                Container(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.grey)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${('fixRate').tr()}: '),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 200,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                  filled: true, fillColor: Colors.blue[50]),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[0-9.,]')),
+                              ],
+                              controller: fixController,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
-                      ],
-                    ),
-                  ],
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('${('floatingRateNT').tr()}: '),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          child: TextField(
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp('[0-9.,]')),
-                            ],
-                            controller: ntController,
+                Container(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.grey)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${('floatingRateNT').tr()}: '),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 200,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                  filled: true, fillColor: Colors.blue[50]),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[0-9.,]')),
+                              ],
+                              controller: ntController,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
-                      ],
-                    ),
-                  ],
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('${('floatingRateVT').tr()}: '),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          child: TextField(
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp('[0-9.,]')),
-                            ],
-                            controller: vtController,
+                Container(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.grey)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${('floatingRateVT').tr()}: '),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 200,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                  filled: true, fillColor: Colors.blue[50]),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[0-9.,]')),
+                              ],
+                              controller: vtController,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
-                      ],
-                    ),
-                  ],
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ]),
             ),

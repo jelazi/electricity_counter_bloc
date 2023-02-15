@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:desktop_window/desktop_window.dart';
-import 'package:electricity_counter/blogs/notification_bloc/notification_bloc.dart';
 import 'package:electricity_counter/models/entry.dart';
 import 'package:electricity_counter/models/user.dart';
 import 'package:electricity_counter/repositories/invoices_repository.dart';
@@ -19,13 +18,13 @@ import 'models/invoice.dart';
 import 'repositories/settings_repository.dart';
 import 'view/mobile/pages/home_page.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  if (Platform.isWindows || Platform.isMacOS) {
+  bool isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+  if (isDesktop) {
     await DesktopWindow.setMinWindowSize(const Size(800, 600));
   }
   await Firebase.initializeApp(
@@ -58,12 +57,14 @@ void main(List<String> args) async {
           ),
           BlocProvider(
               create: ((context) => InvoicesBloc(
+                    isDesktop: isDesktop,
                     usersRepository: usersRepository,
                     settingsRepository: settingsRepository,
                     invoicesRepository: invoicesRepository,
                   ))),
           BlocProvider(
             create: (context) => UsersBloc(
+                isDesktop: isDesktop,
                 usersRepository: usersRepository,
                 settingsRepository: settingsRepository),
           ),

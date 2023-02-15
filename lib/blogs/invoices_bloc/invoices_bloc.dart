@@ -20,11 +20,14 @@ class InvoicesBloc extends Bloc<InvoicesEvent, InvoicesState> {
   SettingsRepository settingsRepository;
   InvoicesRepository invoicesRepository;
   Invoice? currentInvoice;
+  bool isDesktop;
 
   InvoicesBloc({
     required this.usersRepository,
     required this.settingsRepository,
     required this.invoicesRepository,
+    this.currentInvoice,
+    required this.isDesktop,
   }) : super(InvoicesInitial(
           invoices: const <String, String>{},
           invoicesData: const <List<String>>[],

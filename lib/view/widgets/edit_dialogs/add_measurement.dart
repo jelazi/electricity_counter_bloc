@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:easy_localization/easy_localization.dart';
 import 'package:electricity_counter/blogs/bloc_export.dart';
-import 'package:electricity_counter/blogs/notification_bloc/notification_bloc.dart';
 import 'package:f_logs/f_logs.dart';
 import 'package:flutter/material.dart';
 
@@ -163,11 +162,11 @@ class _AddMeasurementDialogState extends State<AddMeasurementDialog> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             height: MediaQuery.of(context).size.height * 0.40,
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -175,74 +174,81 @@ class _AddMeasurementDialogState extends State<AddMeasurementDialog> {
                 children: widget.users.entries.map((entry) {
                   index++;
                   return Align(
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          entry.value,
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.05,
-                            ),
-                            Text(
-                              'NT: ',
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.1,
-                              child: TextField(
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                        decimal: true),
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp('[0-9.,]')),
-                                ],
-                                controller: widget.ntEditingControllers[index],
+                    alignment: Alignment.center,
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      decoration:
+                          BoxDecoration(border: Border.all(color: Colors.grey)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            entry.value,
+                            style: const TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.05,
                               ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.03,
-                            ),
-                            Text('kVh'),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.05,
-                            ),
-                            Text(
-                              'VT: ',
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.1,
-                              child: TextField(
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                        decimal: true),
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp('[0-9.,]')),
-                                ],
-                                controller: widget.vtEditingControllers[index],
+                              const Text(
+                                'NT: ',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Text('kVh'),
-                          ],
-                        ),
-                      ],
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.1,
+                                child: TextField(
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                          decimal: true),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp('[0-9.,]')),
+                                  ],
+                                  controller:
+                                      widget.ntEditingControllers[index],
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.03,
+                              ),
+                              const Text('kVh'),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.05,
+                              ),
+                              const Text(
+                                'VT: ',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.1,
+                                child: TextField(
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                          decimal: true),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp('[0-9.,]')),
+                                  ],
+                                  controller:
+                                      widget.vtEditingControllers[index],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              const Text('kVh'),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }).toList(),

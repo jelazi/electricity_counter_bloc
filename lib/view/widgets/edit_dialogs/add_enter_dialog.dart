@@ -55,7 +55,7 @@ class _AddEnterDialogState extends State<AddEnterDialog> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.05,
                 ),
-                Text(
+                const Text(
                   'NT: ',
                   style:
                       TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
@@ -71,10 +71,10 @@ class _AddEnterDialogState extends State<AddEnterDialog> {
                     controller: widget.ntController,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
-                Text('kVh'),
+                const Text('kVh'),
               ],
             ),
             Row(
@@ -82,7 +82,7 @@ class _AddEnterDialogState extends State<AddEnterDialog> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.05,
                 ),
-                Text(
+                const Text(
                   'VT: ',
                   style:
                       TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
@@ -98,10 +98,10 @@ class _AddEnterDialogState extends State<AddEnterDialog> {
                     controller: widget.vtController,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
-                Text('kVh'),
+                const Text('kVh'),
               ],
             ),
           ],

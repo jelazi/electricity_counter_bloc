@@ -33,7 +33,6 @@ class ResultPage extends StatefulWidget {
     'priceVt'.tr(),
     'fixPrice'.tr(),
     'sumPrice'.tr(),
-    'ratioNtVt'.tr(),
   ];
 
   ResultPage({
@@ -53,7 +52,7 @@ class _ResultPageState extends State<ResultPage> {
         widget.invoice,
         widget.listEntries,
         context.read<InvoicesBloc>().usersRepository);
-    var number = 9;
+    var number = 8;
     var header = widget.listNameValue.map((e) => HeaderCell(text: e)).toList();
     var leftHeader = List<Widget>.generate(result.listName.length,
         (index) => LeftHeaderCell(text: result.listName[index]));
@@ -85,9 +84,6 @@ class _ResultPageState extends State<ResultPage> {
         text: '${row[7].toStringAsFixed(2)} Kč',
         color: Colors.green[400],
       ));
-      items.add(RowCell(
-          text:
-              '${row[8].toStringAsFixed(1)}% / ${row[9].toStringAsFixed(1)}%'));
 
       rows.add(SizedBox(
         width: 150,
@@ -130,7 +126,6 @@ class _ResultPageState extends State<ResultPage> {
         text: '${listSum[7].toStringAsFixed(2)} Kč',
         color: Colors.red[200],
       ),
-      RowCell(text: ''),
     ])));
 
     return Scaffold(
@@ -202,7 +197,7 @@ class _ResultPageState extends State<ResultPage> {
 
 Future<String> makePdf(BuildContext context, List listNameValue) async {
   var listEntry = context.read<UsersBloc>().currentListEntry;
-  var invoice = context.read<InvoicesBloc>().currentInvoice;
+  Invoice? invoice = context.read<InvoicesBloc>().currentInvoice;
   final result = context.read<InvoicesBloc>().invoicesRepository.sumResult(
       invoice!, listEntry, context.read<InvoicesBloc>().usersRepository);
   if (listEntry.isEmpty || invoice == null) {
@@ -225,7 +220,7 @@ Future<String> makePdf(BuildContext context, List listNameValue) async {
   var leftHeader = List<pw.Container>.generate(
       result.listName.length, (index) => getPdfLeftHeaderCell(result, index));
   var listTableRow = List<List<Widget>>.generate(leftHeader.length,
-      (index) => List<Widget>.generate(10, (j) => Container()));
+      (index) => List<Widget>.generate(8, (j) => Container()));
 
   for (var row in result.listData) {
     var items = <pw.Container>[];
@@ -241,8 +236,6 @@ Future<String> makePdf(BuildContext context, List listNameValue) async {
       text: '${row[7].toStringAsFixed(2)} Kč',
       color: PdfColors.green100,
     ));
-    items.add(getPdfTableCell(
-        text: '${row[8].toStringAsFixed(1)}% / ${row[9].toStringAsFixed(1)}%'));
     tableRow.add(pw.TableRow(children: items));
   }
 
@@ -295,7 +288,7 @@ pw.Container getPdfLeftHeaderCell(Result result, int index) {
 pw.Container getPdfHeaderCell(String text) {
   var fontSize = 6.0;
   return pw.Container(
-      padding: pw.EdgeInsets.all(2),
+      padding: const pw.EdgeInsets.all(2),
       decoration: pw.BoxDecoration(
         border: pw.Border.all(color: PdfColors.grey),
         color: PdfColors.blue100,
