@@ -82,7 +82,7 @@ class EntryCard extends StatelessWidget {
                 });
               }));
             } else {
-              items.add(getMenuItemWithIcon(context, 'add', Icons.add, () {
+              items.add(getMenuItemWithIcon(context, 'add'.tr(), Icons.add, () {
                 User? user = context
                     .read<UsersBloc>()
                     .usersRepository

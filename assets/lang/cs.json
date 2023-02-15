@@ -52,6 +52,7 @@
     "no" : "Ne",
     "yes" : "Ano",
     "sum" : "Celkem: ",
+    "add" : "Přidat",
     "createPdf" : "Vytvoř Pdf",
     "createExcel" : "Vytvoř Excel tabulku"
 

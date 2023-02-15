@@ -2,7 +2,10 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:electricity_counter/view/desktop/pages/excel_page.dart';
+import 'package:excel/excel.dart';
 import 'package:f_logs/f_logs.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,9 +13,11 @@ import 'package:horizontal_data_table/horizontal_data_table.dart';
 
 import 'package:electricity_counter/blogs/bloc_export.dart';
 import 'package:electricity_counter/services/enum.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../models/entry.dart';
 import '../../../models/invoice.dart';
@@ -187,11 +192,75 @@ class _ResultPageState extends State<ResultPage> {
                     },
                     child: Text('createPdf'.tr())),
                 ElevatedButton(
-                    onPressed: () {}, child: Text('createExcel'.tr())),
+                    onPressed: () {
+                      var excel = Excel.createExcel();
+                      Sheet sheetObject =
+                          excel[getNameMonth(widget.invoice.date)];
+
+                      CellStyle cellStyle = CellStyle(
+                          backgroundColorHex: "#1AFF1A",
+                          fontFamily: getFontFamily(FontFamily.Calibri));
+
+                      cellStyle.underline = Underline.Single;
+                      final result = context
+                          .read<InvoicesBloc>()
+                          .invoicesRepository
+                          .sumResult(widget.invoice, widget.listEntries,
+                              context.read<InvoicesBloc>().usersRepository);
+
+                      sheetObject.insertRowIterables(widget.listNameValue, 0);
+                      for (var row in result.listData) {
+                        List<String> line = [];
+                        line.add(result.listName[result.listData.indexOf(row)]);
+                        line.add('${row[0]} kWh');
+                        line.add('${row[1].toStringAsFixed(1)} %');
+                        line.add('${row[2].toStringAsFixed(1)} Kč');
+                        line.add('${row[3]} kWh');
+                        line.add('${row[4].toStringAsFixed(1)} %');
+                        line.add('${row[5].toStringAsFixed(2)} Kč');
+                        line.add('${row[6].toStringAsFixed(2)} Kč');
+                        line.add('${row[7].toStringAsFixed(2)} Kč');
+                        sheetObject.insertRowIterables(
+                            line, result.listData.indexOf(row) + 1);
+                      }
+
+                      getDialogSaveExcel(excel, 'tabulka.xlsx', context);
+                    },
+                    child: Text('createExcel'.tr())),
               ],
             )
           ],
         ));
+  }
+
+  Future<void> getDialogSaveExcel(
+      Excel excel, String nameFile, BuildContext context) async {
+    var fileBytes = excel.save();
+    var directory = await getApplicationDocumentsDirectory();
+    var file = File("$directory/$nameFile")
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(fileBytes!);
+
+    if (Platform.isAndroid || Platform.isIOS) {
+      String contentString = await file.readAsString();
+      Share.share(contentString,
+          sharePositionOrigin: Rect.fromLTWH(
+              0,
+              0,
+              MediaQuery.of(context).size.width,
+              MediaQuery.of(context).size.height / 2));
+    }
+    if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+      String? outputFile = await FilePicker.platform.saveFile(
+        dialogTitle: 'Please write name json file:',
+        fileName: nameFile,
+      );
+      if (outputFile == null) {
+        FLog.warning(text: 'file picker cancel');
+      } else {
+        file.copy(outputFile);
+      }
+    }
   }
 }
 
