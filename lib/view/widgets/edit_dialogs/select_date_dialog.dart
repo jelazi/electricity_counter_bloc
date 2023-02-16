@@ -101,7 +101,7 @@ class _SelectDateDialogState extends State<SelectDateDialog> {
                     onChanged: (value) {
                       FLog.debug(text: 'value: $value');
                       setState(() {
-                        widget.selectedMonth = value ?? 'Leden';
+                        widget.selectedMonth = value as String? ?? 'Leden';
                       });
                     },
                     value: widget.selectedMonth,
@@ -124,7 +124,8 @@ class _SelectDateDialogState extends State<SelectDateDialog> {
                     onChanged: (value) {
                       FLog.debug(text: 'value: $value');
                       setState(() {
-                        widget.selectedYear = value ?? widget.selectedYear;
+                        widget.selectedYear =
+                            value as String? ?? widget.selectedYear;
                       });
                     },
                     value: widget.selectedYear,

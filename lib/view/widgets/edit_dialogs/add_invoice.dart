@@ -97,7 +97,8 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
                       onChanged: (value) {
                         FLog.debug(text: 'value: $value');
                         setState(() {
-                          widget.selectedMonth = value ?? widget.selectedMonth;
+                          widget.selectedMonth =
+                              value as String? ?? widget.selectedMonth;
                         });
                       },
                       value: widget.selectedMonth,
@@ -120,7 +121,8 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
                       onChanged: (value) {
                         FLog.debug(text: 'value: $value');
                         setState(() {
-                          widget.selectedYear = value ?? widget.selectedYear;
+                          widget.selectedYear =
+                              value as String? ?? widget.selectedYear;
                         });
                       },
                       value: widget.selectedYear,

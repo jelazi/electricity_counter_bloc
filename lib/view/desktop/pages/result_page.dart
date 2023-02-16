@@ -196,12 +196,6 @@ class _ResultPageState extends State<ResultPage> {
                       var excel = Excel.createExcel();
                       Sheet sheetObject =
                           excel[getNameMonth(widget.invoice.date)];
-
-                      CellStyle cellStyle = CellStyle(
-                          backgroundColorHex: "#1AFF1A",
-                          fontFamily: getFontFamily(FontFamily.Calibri));
-
-                      cellStyle.underline = Underline.Single;
                       final result = context
                           .read<InvoicesBloc>()
                           .invoicesRepository

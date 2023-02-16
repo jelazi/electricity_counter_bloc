@@ -22,6 +22,9 @@ import 'package:easy_localization/easy_localization.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await EasyLocalization.ensureInitialized();
   bool isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
   if (isDesktop) {
