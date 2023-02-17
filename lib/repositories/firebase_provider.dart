@@ -12,6 +12,10 @@ class FirebaseProvider {
       FirebaseFirestore.instance.collection('invoices');
 
   FirebaseProvider() {
+    inst.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+    );
     userCollection = inst.collection('users');
     invoicesCollection = inst.collection('invoices');
   }
@@ -48,6 +52,19 @@ class FirebaseProvider {
     }
   }
 
+  Future<List<User>> getAllUser() async {
+    List<User> listUsers = [];
+    try {
+      var querySnapshot = await userCollection.get();
+      for (var doc in querySnapshot.docs) {
+        listUsers.add(User.fromJson(doc.data()));
+      }
+    } catch (e) {
+      FLog.error(text: '$e');
+    }
+    return listUsers;
+  }
+
   Future<void> addInvoiceToFirebase(Invoice invoice) async {
     try {
       var snapshot = await invoicesCollection.doc(invoice.id).get();
@@ -78,5 +95,18 @@ class FirebaseProvider {
     } catch (e) {
       FLog.error(text: '$e');
     }
+  }
+
+  Future<List<Invoice>> getAllInvoice() async {
+    List<Invoice> listInvoices = [];
+    try {
+      var querySnapshot = await invoicesCollection.get();
+      for (var doc in querySnapshot.docs) {
+        listInvoices.add(Invoice.fromJson(doc.data()));
+      }
+    } catch (e) {
+      FLog.error(text: '$e');
+    }
+    return listInvoices;
   }
 }

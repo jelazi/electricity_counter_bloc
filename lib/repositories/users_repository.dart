@@ -23,9 +23,21 @@ class UsersRepository {
   }) {}
 
   Future<void> initListUsers() async {
-    List<User> user = await settingsRepository.getListUser();
+    List<User> user = await settingsRepository.getListUserFromLocal();
     users = user;
-    // FLog.debug(text: 'here');
+    await updateListUsersFromFirebase();
+  }
+
+  Future<void> updateListUsersFromFirebase() async {
+    List<User> firebaseList =
+        await settingsRepository.getListUserFromFirebase();
+    for (var i = 0; i < users.length; i++) {
+      for (var user in firebaseList) {
+        if (users[i].id == user.id && users[i] != user) {
+          users[i] = user;
+        }
+      }
+    }
   }
 
   User? getUserById(String id) {
@@ -124,6 +136,7 @@ class UsersRepository {
         }
         user.listEntries.remove(ent);
         users[i] = user;
+        settingsRepository.saveUser(users[i]);
         FLog.debug(text: '${users[i].listEntries.length}');
         return;
       }

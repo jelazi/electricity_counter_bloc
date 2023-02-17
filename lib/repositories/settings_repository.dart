@@ -44,8 +44,12 @@ class SettingsRepository {
     _firebaseProvider.deleteUser(user);
   }
 
-  Future<List<User>> getListUser() async {
+  Future<List<User>> getListUserFromLocal() async {
     return _hiveProvider.getListUser();
+  }
+
+  Future<List<User>> getListUserFromFirebase() async {
+    return _firebaseProvider.getAllUser();
   }
 
   void saveInvoice(Invoice invoice) {
@@ -58,7 +62,11 @@ class SettingsRepository {
     _firebaseProvider.deleteInvoice(invoice);
   }
 
-  Future<List<Invoice>> getListInvoice() async {
+  Future<List<Invoice>> getListInvoiceFromLocal() async {
     return _hiveProvider.getListInvoices();
+  }
+
+  Future<List<Invoice>> getListInvoiceFromFirebase() async {
+    return _firebaseProvider.getAllInvoice();
   }
 }

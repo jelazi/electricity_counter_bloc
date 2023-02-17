@@ -30,9 +30,6 @@ void main(List<String> args) async {
   if (isDesktop) {
     await DesktopWindow.setMinWindowSize(const Size(800, 600));
   }
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   MyLogger();
   // FLog.debug(text: 'start App');
   await initHiveFunction();
