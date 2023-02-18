@@ -231,7 +231,7 @@ class _ResultPageState extends State<ResultPage> {
       Excel excel, String nameFile, BuildContext context) async {
     var fileBytes = excel.save();
     var directory = await getApplicationDocumentsDirectory();
-    var file = File("$directory/$nameFile")
+    var file = File("$nameFile")
       ..createSync(recursive: true)
       ..writeAsBytesSync(fileBytes!);
 

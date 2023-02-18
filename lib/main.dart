@@ -8,7 +8,6 @@ import 'package:electricity_counter/repositories/users_repository.dart';
 import 'package:electricity_counter/services/my_logger.dart';
 import 'package:electricity_counter/view/desktop/pages/home_page.dart';
 import 'package:f_logs/f_logs.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -22,9 +21,9 @@ import 'package:easy_localization/easy_localization.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
+  /* await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
+  );*/
   await EasyLocalization.ensureInitialized();
   bool isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
   if (isDesktop) {

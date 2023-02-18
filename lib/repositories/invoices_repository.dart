@@ -24,10 +24,10 @@ class InvoicesRepository {
 
   Future<void> initInvoices() async {
     listInvoices = await settingsRepository.getListInvoiceFromLocal();
-    await updateListInvoicesFromFirebase();
+    //  await updateListInvoicesFromFirebase();
   }
 
-  Future<void> updateListInvoicesFromFirebase() async {
+  /* Future<void> updateListInvoicesFromFirebase() async {
     List<Invoice> firebaseList =
         await settingsRepository.getListInvoiceFromFirebase();
     for (var i = 0; i < listInvoices.length; i++) {
@@ -37,7 +37,7 @@ class InvoicesRepository {
         }
       }
     }
-  }
+  }*/
 
   Invoice? newInvoice(DateTime date, double fixRate, double floatingRateNT,
       double floatingRateVT) {

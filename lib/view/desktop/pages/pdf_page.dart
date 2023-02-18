@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdfx/pdfx.dart';
-import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -17,13 +16,13 @@ import '../../../blogs/bloc_export.dart';
 class PdfScreen extends StatelessWidget {
   late String pdfPath;
   var pdfController;
-  var pdfPinchController;
+  var pdfViewController;
   PdfScreen({
     Key? key,
     required this.pdfPath,
   }) : super(key: key) {
     pdfController = PdfController(document: PdfDocument.openFile(pdfPath));
-    pdfPinchController = PdfControllerPinch(
+    pdfViewController = PdfController(
       document: PdfDocument.openFile(pdfPath),
     );
   }
@@ -44,8 +43,8 @@ class PdfScreen extends StatelessWidget {
               final page =
                   await (await PdfDocument.openFile(pdfPath)).getPage(1);
               final pageImage = await page.render(
-                width: page.width,
-                height: page.height,
+                width: page.width * 2,
+                height: page.height * 2,
                 format: PdfPageImageFormat.png,
                 backgroundColor: '#ffffff',
               );
@@ -58,8 +57,8 @@ class PdfScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: PdfViewPinch(
-        controller: pdfPinchController,
+      body: PdfView(
+        controller: pdfViewController,
       ),
     );
   }
