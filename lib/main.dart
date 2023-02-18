@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:electricity_counter/models/entry.dart';
 import 'package:electricity_counter/models/user.dart';
+import 'package:electricity_counter/repositories/hive_store.dart';
 import 'package:electricity_counter/repositories/invoices_repository.dart';
 import 'package:electricity_counter/repositories/users_repository.dart';
 import 'package:electricity_counter/services/my_logger.dart';
@@ -18,12 +19,11 @@ import 'repositories/settings_repository.dart';
 import 'view/mobile/pages/home_page.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firedart/firedart.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-  /* await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );*/
+
   await EasyLocalization.ensureInitialized();
   bool isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
   if (isDesktop) {
@@ -32,6 +32,7 @@ void main(List<String> args) async {
   MyLogger();
   // FLog.debug(text: 'start App');
   await initHiveFunction();
+  Firestore.initialize(projectId);
   SettingsRepository settingsRepository = SettingsRepository();
   await settingsRepository.initBoxes();
   UsersRepository usersRepository =

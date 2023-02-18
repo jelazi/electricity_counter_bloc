@@ -4,14 +4,15 @@ import 'package:electricity_counter/repositories/firebase_provider.dart';
 import '../models/user.dart';
 import '../services/enum.dart';
 import 'hive_provider.dart';
+import 'package:firedart/firedart.dart';
 
 class SettingsRepository {
   String locale = 'cs';
   late HiveProvider _hiveProvider;
-//  late FirebaseProvider _firebaseProvider;
+  late FirebaseProvider _firebaseProvider;
   SettingsRepository() {
     _hiveProvider = HiveProvider();
-//    _firebaseProvider = FirebaseProvider();
+    _firebaseProvider = FirebaseProvider();
   }
 
   Future<void> initBoxes() async {
@@ -36,37 +37,37 @@ class SettingsRepository {
 
   void saveUser(User user) {
     _hiveProvider.setUser(user);
-//    _firebaseProvider.addUserToFirebase(user);
+    _firebaseProvider.addUserToFirebase(user);
   }
 
   void removeUser(User user) {
     _hiveProvider.deleteUser(user);
-    //   _firebaseProvider.deleteUser(user);
+    _firebaseProvider.deleteUser(user);
   }
 
   Future<List<User>> getListUserFromLocal() async {
     return _hiveProvider.getListUser();
   }
-/*
+
   Future<List<User>> getListUserFromFirebase() async {
     return _firebaseProvider.getAllUser();
-  }*/
+  }
 
   void saveInvoice(Invoice invoice) {
     _hiveProvider.setInvoice(invoice);
-    //  _firebaseProvider.addInvoiceToFirebase(invoice);
+    _firebaseProvider.addInvoiceToFirebase(invoice);
   }
 
   void removeInvoice(Invoice invoice) {
     _hiveProvider.deleteInvoice(invoice);
-    //   _firebaseProvider.deleteInvoice(invoice);
+    _firebaseProvider.deleteInvoice(invoice);
   }
 
   Future<List<Invoice>> getListInvoiceFromLocal() async {
     return _hiveProvider.getListInvoices();
   }
 
-/*  Future<List<Invoice>> getListInvoiceFromFirebase() async {
+  Future<List<Invoice>> getListInvoiceFromFirebase() async {
     return _firebaseProvider.getAllInvoice();
-  }*/
+  }
 }

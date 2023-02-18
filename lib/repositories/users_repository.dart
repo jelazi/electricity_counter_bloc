@@ -25,9 +25,9 @@ class UsersRepository {
   Future<void> initListUsers() async {
     List<User> user = await settingsRepository.getListUserFromLocal();
     users = user;
-    //  await updateListUsersFromFirebase();
+    await updateListUsersFromFirebase();
   }
-/*
+
   Future<void> updateListUsersFromFirebase() async {
     List<User> firebaseList =
         await settingsRepository.getListUserFromFirebase();
@@ -38,7 +38,12 @@ class UsersRepository {
         }
       }
     }
-  }*/
+    for (var user in firebaseList) {
+      if (users.firstWhereOrNull((element) => element.id == user.id) == null) {
+        users.add(user);
+      }
+    }
+  }
 
   User? getUserById(String id) {
     return users.firstWhereOrNull((element) => element.id == id);
