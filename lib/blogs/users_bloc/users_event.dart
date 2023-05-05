@@ -32,6 +32,14 @@ class RemoveUser extends UsersEvent {
   List<Object> get props => [id];
 }
 
+class ChangeOrderUsers extends UsersEvent {
+  List<String> nameOrder;
+  ChangeOrderUsers({required this.nameOrder});
+
+  @override
+  List<Object> get props => [nameOrder];
+}
+
 class AddEntry extends UsersEvent {
   String idUser;
   DateTime date;

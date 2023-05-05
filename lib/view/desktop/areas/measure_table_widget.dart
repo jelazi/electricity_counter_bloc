@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:electricity_counter/services/enum.dart';
+import 'package:electricity_counter/view/desktop/pages/reaorerable_view_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../../blogs/bloc_export.dart';
@@ -23,13 +24,7 @@ class MeasureTableWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: BlocBuilder<UsersBloc, UsersState>(builder: (context, state) {
         var headerTableEnters = <Widget>[];
-        headerTableEnters.add(Card(
-            child: SizedBox(
-                height: 60,
-                width: 200,
-                child: ListTile(
-                    tileColor: Colors.red[50],
-                    title: Text(('datesEnter').tr())))));
+        headerTableEnters.add(Card(child: SizedBox(height: 60, width: 200, child: ListTile(tileColor: Colors.red[50], title: Text(('datesEnter').tr())))));
         for (String id in state.users.keys) {
           headerTableEnters.add(
             NameUserCard(id: id, name: state.users[id] ?? ''),
@@ -41,10 +36,7 @@ class MeasureTableWidget extends StatelessWidget {
         for (var date in state.months) {
           var cells = <Widget>[];
           leftHeadertableEnters.add(Card(
-            child: SizedBox(
-                height: 60,
-                width: 200,
-                child: ListTile(title: Text(getNameMonth(date)))),
+            child: SizedBox(height: 60, width: 200, child: ListTile(title: Text(getNameMonth(date)))),
           ));
           for (var i = 0; i < state.entries.length; i++) {
             cells.add(
@@ -67,11 +59,7 @@ class MeasureTableWidget extends StatelessWidget {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            TableEnters(
-                number: numberTableEnters,
-                header: headerTableEnters,
-                leftHeader: leftHeadertableEnters,
-                rows: rowsTableEnters),
+            TableEnters(number: numberTableEnters, header: headerTableEnters, leftHeader: leftHeadertableEnters, rows: rowsTableEnters),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
@@ -85,9 +73,7 @@ class MeasureTableWidget extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) {
                             return EditTextDialog(
-                              okClick: (nameUser) => context
-                                  .read<UsersBloc>()
-                                  .add(AddUser(nameUser: nameUser)),
+                              okClick: (nameUser) => context.read<UsersBloc>().add(AddUser(nameUser: nameUser)),
                               title: title,
                               value: '',
                             );
@@ -95,6 +81,16 @@ class MeasureTableWidget extends StatelessWidget {
                     },
                     icon: const Icon(Icons.person),
                     label: Text(('addUser').tr())),
+                ElevatedButton.icon(
+                    onPressed: () {
+                      String title = ('reorderUsers').tr();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ReorderableViewPage()),
+                      );
+                    },
+                    icon: const Icon(Icons.sort),
+                    label: Text(('reorderUsers').tr())),
                 ElevatedButton.icon(
                     onPressed: () {
                       String title = ('addEnter').tr();
@@ -105,8 +101,7 @@ class MeasureTableWidget extends StatelessWidget {
                             return AddMeasurementDialog(
                               context: context,
                               title: title,
-                              users:
-                                  context.read<UsersBloc>().getCurrentUsers(),
+                              users: context.read<UsersBloc>().getCurrentUsers(),
                               okClick: (listEntries) {},
                             );
                           });

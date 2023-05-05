@@ -2,6 +2,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import 'entry.dart';
 
 part 'user.g.dart';
@@ -15,6 +16,8 @@ class User extends Equatable {
   String name;
   @HiveField(2)
   List<Entry> listEntries;
+  @HiveField(3)
+  int order;
 
   @override
   List<Object?> get props => [
@@ -24,6 +27,7 @@ class User extends Equatable {
       ];
 
   User({
+    required this.order,
     required this.id,
     required this.name,
     required this.listEntries,
@@ -40,11 +44,13 @@ class User extends Equatable {
     String? id,
     String? name,
     List<Entry>? listEntries,
+    int? order,
   }) {
     return User(
       id: id ?? this.id,
       name: name ?? this.name,
       listEntries: listEntries ?? this.listEntries,
+      order: order ?? this.order,
     );
   }
 }

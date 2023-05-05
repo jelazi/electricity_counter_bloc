@@ -10,6 +10,7 @@ class QuestionDialog extends StatelessWidget {
   double height = 200;
   double width = 400;
   bool okBack = true;
+  Function? cancelClick;
   QuestionDialog({
     Key? key,
     required this.title,
@@ -18,6 +19,7 @@ class QuestionDialog extends StatelessWidget {
     this.height = 200,
     this.width = 400,
     this.okBack = true,
+    this.cancelClick,
   }) : super(key: key);
 
   @override
@@ -40,8 +42,7 @@ class QuestionDialog extends StatelessWidget {
           ),
         ),
       ),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
       contentPadding: const EdgeInsets.all(5.0),
       content: Container(
         padding: const EdgeInsets.all(8),
@@ -60,7 +61,14 @@ class QuestionDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () {
+                      if (okBack) {
+                        Navigator.of(context).pop();
+                      }
+                      if (cancelClick != null) {
+                        cancelClick!();
+                      }
+                    },
                     child: Text(
                       ('no').tr(),
                     )),

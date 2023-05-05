@@ -13,49 +13,62 @@ import '../models/user.dart';
 import 'package:collection/collection.dart';
 
 class UsersRepository {
-  var users = <User>[];
+  var _users = <User>[];
   SettingsRepository settingsRepository;
   final _errorMessageController = StreamController<String>();
   Stream<String> get errorMessage => _errorMessageController.stream;
+  int lastOrder = 0;
 
   UsersRepository({
     required this.settingsRepository,
-  }) {}
+  });
+
+  List<User> get users {
+    _users.sort((a, b) => a.order.compareTo(b.order));
+    return _users;
+  }
 
   Future<void> initListUsers() async {
     List<User> user = await settingsRepository.getListUserFromLocal();
-    users = user;
+    _users = user;
+    for (var user in _users) {
+      if (user.order > lastOrder) {
+        lastOrder = user.order;
+      }
+    }
     await updateListUsersFromFirebase();
   }
 
   Future<void> updateListUsersFromFirebase() async {
-    List<User> firebaseList =
-        await settingsRepository.getListUserFromFirebase();
-    for (var i = 0; i < users.length; i++) {
+    List<User> firebaseList = await settingsRepository.getListUserFromFirebase();
+    for (var i = 0; i < _users.length; i++) {
       for (var user in firebaseList) {
-        if (users[i].id == user.id && users[i] != user) {
-          users[i] = user;
+        if (_users[i].id == user.id && _users[i] != user) {
+          _users[i] = user;
         }
       }
     }
     for (var user in firebaseList) {
-      if (users.firstWhereOrNull((element) => element.id == user.id) == null) {
-        users.add(user);
+      if (_users.firstWhereOrNull((element) => element.id == user.id) == null) {
+        _users.add(user);
+        if (user.order > lastOrder) {
+          lastOrder = user.order;
+        }
       }
     }
   }
 
   User? getUserById(String id) {
-    return users.firstWhereOrNull((element) => element.id == id);
+    return _users.firstWhereOrNull((element) => element.id == id);
   }
 
   User? getUserByName(String name) {
-    return users.firstWhereOrNull((element) => element.name == name);
+    return _users.firstWhereOrNull((element) => element.name == name);
   }
 
   List<Entry> getListEntriesByDate(DateTime date) {
     var list = <Entry>[];
-    for (var user in users) {
+    for (var user in _users) {
       for (var entry in user.listEntries) {
         if (entry.date.year == date.year && entry.date.month == date.month) {
           list.add(entry);
@@ -66,7 +79,7 @@ class UsersRepository {
   }
 
   Entry? getEntry(String idUser, DateTime date) {
-    for (var user in users) {
+    for (var user in _users) {
       if (user.id == idUser) {
         for (var entry in user.listEntries) {
           if (entry.date.month == date.month && entry.date.year == date.year) {
@@ -79,14 +92,15 @@ class UsersRepository {
   }
 
   User? createNewUser(String name) {
-    if (users.firstWhereOrNull((element) => element.name == name) != null) {
+    if (_users.firstWhereOrNull((element) => element.name == name) != null) {
       FLog.warning(text: 'this user name is already in use');
       _errorMessageController.add(('userExists').tr());
       return null;
     }
     var uuid = const Uuid();
-    User user = User(id: uuid.v4(), name: name, listEntries: []);
-    users.add(user);
+    lastOrder++;
+    User user = User(id: uuid.v4(), name: name, listEntries: [], order: lastOrder);
+    _users.add(user);
     settingsRepository.saveUser(user);
 
     return user;
@@ -96,53 +110,62 @@ class UsersRepository {
     User? user = getUserById(idUser);
     if (user != null) {
       settingsRepository.removeUser(user);
-      users.remove(users.firstWhereOrNull((element) => element.id == idUser));
+      _users.remove(_users.firstWhereOrNull((element) => element.id == idUser));
     }
   }
 
   void addEntry(Entry entry) {
-    if (users.isEmpty) {
+    if (_users.isEmpty) {
       return;
     }
-    for (int i = 0; i < users.length; i++) {
-      if (entry.idUser == users[i].id) {
+    for (int i = 0; i < _users.length; i++) {
+      if (entry.idUser == _users[i].id) {
         int month = entry.date.month;
         int year = entry.date.year;
-        var updateEntry = users[i].listEntries.firstWhereOrNull((element) =>
-            element.date.month == month && element.date.year == year);
+        var updateEntry = _users[i].listEntries.firstWhereOrNull((element) => element.date.month == month && element.date.year == year);
         if (updateEntry != null) {
           FLog.debug(text: 'update entry');
-          users[i].listEntries[users[i].listEntries.indexOf(updateEntry)].nt =
-              entry.nt;
-          users[i].listEntries[users[i].listEntries.indexOf(updateEntry)].vt =
-              entry.vt;
-          settingsRepository.saveUser(users[i]);
+          _users[i].listEntries[_users[i].listEntries.indexOf(updateEntry)].nt = entry.nt;
+          _users[i].listEntries[_users[i].listEntries.indexOf(updateEntry)].vt = entry.vt;
+          settingsRepository.saveUser(_users[i]);
           return;
         }
-        users[i].addEntry(entry);
-        settingsRepository.saveUser(users[i]);
+        _users[i].addEntry(entry);
+        settingsRepository.saveUser(_users[i]);
         return;
       }
     }
   }
 
+  void changeSortByListNames(List<String> newListName) {
+    var index = 0;
+    for (final name in newListName) {
+      index++;
+      for (int i = 0; i < _users.length; i++) {
+        if (name == _users[i].name && _users[i].order != index) {
+          _users[i].order = index;
+          settingsRepository.saveUser(_users[i]);
+        }
+      }
+    }
+  }
+
   void removeEntry(Entry entry) {
-    if (users.isEmpty) {
+    if (_users.isEmpty) {
       return;
     }
-    for (int i = 0; i < users.length; i++) {
-      if (entry.idUser == users[i].id) {
-        var user = users[i].copyWith();
-        var ent =
-            user.listEntries.firstWhereOrNull((element) => element == entry);
+    for (int i = 0; i < _users.length; i++) {
+      if (entry.idUser == _users[i].id) {
+        var user = _users[i].copyWith();
+        var ent = user.listEntries.firstWhereOrNull((element) => element == entry);
         if (ent == null) {
           FLog.error(text: 'entry is not here');
           return;
         }
         user.listEntries.remove(ent);
-        users[i] = user;
-        settingsRepository.saveUser(users[i]);
-        FLog.debug(text: '${users[i].listEntries.length}');
+        _users[i] = user;
+        settingsRepository.saveUser(_users[i]);
+        FLog.debug(text: '${_users[i].listEntries.length}');
         return;
       }
     }
