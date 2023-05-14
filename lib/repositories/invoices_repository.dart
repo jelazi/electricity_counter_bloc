@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
-import 'package:f_logs/f_logs.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/entry.dart';
@@ -50,7 +49,7 @@ class InvoicesRepository {
       double floatingRateVT) {
     if (listInvoices.firstWhereOrNull((element) => element.date == date) !=
         null) {
-      FLog.warning(text: 'this user name is already in use');
+      print('this user name is already in use');
       _errorMessageController.add('this user name is already in use');
       return null;
     }

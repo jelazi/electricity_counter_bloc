@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:easy_localization/easy_localization.dart';
-import 'package:f_logs/f_logs.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:electricity_counter/view/widgets/edit_dialogs/add_enter_dialog.dart';

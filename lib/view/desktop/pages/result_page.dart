@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:electricity_counter/view/desktop/pages/excel_page.dart';
-import 'package:excel/excel.dart';
-import 'package:f_logs/f_logs.dart';
+import 'package:excel/excel.dart' as exc;
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -193,8 +193,8 @@ class _ResultPageState extends State<ResultPage> {
                     child: Text('createPdf'.tr())),
                 ElevatedButton(
                     onPressed: () {
-                      var excel = Excel.createExcel();
-                      Sheet sheetObject =
+                      var excel = exc.Excel.createExcel();
+                      exc.Sheet sheetObject =
                           excel[getNameMonth(widget.invoice.date)];
                       final result = context
                           .read<InvoicesBloc>()
@@ -228,7 +228,7 @@ class _ResultPageState extends State<ResultPage> {
   }
 
   Future<void> getDialogSaveExcel(
-      Excel excel, String nameFile, BuildContext context) async {
+      exc.Excel excel, String nameFile, BuildContext context) async {
     var fileBytes = excel.save();
     var directory = await getApplicationDocumentsDirectory();
     var file = File("$nameFile")
@@ -250,7 +250,7 @@ class _ResultPageState extends State<ResultPage> {
         fileName: nameFile,
       );
       if (outputFile == null) {
-        FLog.warning(text: 'file picker cancel');
+        print('file picker cancel');
       } else {
         file.copy(outputFile);
       }
@@ -264,7 +264,7 @@ Future<String> makePdf(BuildContext context, List listNameValue) async {
   final result = context.read<InvoicesBloc>().invoicesRepository.sumResult(
       invoice!, listEntry, context.read<InvoicesBloc>().usersRepository);
   if (listEntry.isEmpty || invoice == null) {
-    FLog.debug(text: 'listEntry or invoice is null');
+    print('listEntry or invoice is null');
     return '';
   }
 

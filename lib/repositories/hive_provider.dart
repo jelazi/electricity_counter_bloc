@@ -1,4 +1,3 @@
-import 'package:f_logs/f_logs.dart';
 import 'package:hive/hive.dart';
 
 import '../models/invoice.dart';

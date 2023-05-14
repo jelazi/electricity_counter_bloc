@@ -2,7 +2,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:f_logs/f_logs.dart';
+
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -75,18 +75,23 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     }
     months.sort();
 
-    entries = List<List<String>>.generate(users.length, (index) => List<String>.generate(months.length, (index) => ''));
-    nts = List<List<double?>>.generate(users.length, (index) => List<double?>.generate(months.length, (index) => null));
-    vts = List<List<double?>>.generate(users.length, (index) => List<double?>.generate(months.length, (index) => null));
+    entries = List<List<String>>.generate(users.length,
+        (index) => List<String>.generate(months.length, (index) => ''));
+    nts = List<List<double?>>.generate(users.length,
+        (index) => List<double?>.generate(months.length, (index) => null));
+    vts = List<List<double?>>.generate(users.length,
+        (index) => List<double?>.generate(months.length, (index) => null));
     for (User user in users) {
       for (var month in months) {
-        var entry = user.listEntries.firstWhereOrNull((entry) => entry.date == month);
+        var entry =
+            user.listEntries.firstWhereOrNull((entry) => entry.date == month);
         if (entry == null) {
           entries[users.indexOf(user)][months.indexOf(month)] = '';
           vts[users.indexOf(user)][months.indexOf(month)] = null;
           nts[users.indexOf(user)][months.indexOf(month)] = null;
         } else {
-          entries[users.indexOf(user)][months.indexOf(month)] = 'nt: ${entry.nt} vt: ${entry.vt}';
+          entries[users.indexOf(user)][months.indexOf(month)] =
+              'nt: ${entry.nt} vt: ${entry.vt}';
           nts[users.indexOf(user)][months.indexOf(month)] = entry.nt;
           vts[users.indexOf(user)][months.indexOf(month)] = entry.vt;
         }
@@ -145,7 +150,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     final state = this.state;
     Entry? entry = usersRepository.getEntry(event.idUser, event.date);
     if (entry == null) {
-      entry = Entry(date: event.date, idUser: event.idUser, nt: event.nt, vt: event.vt);
+      entry = Entry(
+          date: event.date, idUser: event.idUser, nt: event.nt, vt: event.vt);
       usersRepository.addEntry(entry);
     } else {
       Entry newEntry = entry.copyWith(nt: event.nt, vt: event.vt);
@@ -168,10 +174,14 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     NumberFormat formatter = NumberFormat("00");
     for (var i = 0; i < entries[0].length; i++) {
       var user = usersRepository.getUserByName(entries[0][i]);
-      FLog.debug(text: '${user?.name}');
+      print('${user?.name}');
       if (user != null) {
-        usersRepository.addEntry(
-            Entry(date: DateTime.parse('${event.year}-${formatter.format(event.month)}-01'), idUser: user.id, nt: double.parse(entries[1][i]), vt: double.parse(entries[2][i])));
+        usersRepository.addEntry(Entry(
+            date: DateTime.parse(
+                '${event.year}-${formatter.format(event.month)}-01'),
+            idUser: user.id,
+            nt: double.parse(entries[1][i]),
+            vt: double.parse(entries[2][i])));
       }
     }
     var list = _generateUserTableData();
