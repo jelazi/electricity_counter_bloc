@@ -8,6 +8,8 @@ import '../../../models/user.dart';
 class ReorderableViewPage extends StatefulWidget {
   List<String> usersName = [];
   List<User> users = [];
+
+  ReorderableViewPage({super.key});
   @override
   _ReorderableViewPageState createState() => _ReorderableViewPageState();
 }
@@ -60,7 +62,7 @@ class _ReorderableViewPageState extends State<ReorderableViewPage> {
                   );
                 });
           },
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           //replace with our own icon data.
         ),
         title: Text(
@@ -68,10 +70,11 @@ class _ReorderableViewPageState extends State<ReorderableViewPage> {
         ),
         centerTitle: true,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.sort_by_alpha), tooltip: 'sortByAlpha'.tr(), onPressed: sorting),
+          IconButton(icon: const Icon(Icons.sort_by_alpha), tooltip: 'sortByAlpha'.tr(), onPressed: sorting),
         ],
       ),
       body: ReorderableListView(
+        onReorder: reorderData,
         children: [
           for (final items in widget.usersName)
             Card(
@@ -79,15 +82,14 @@ class _ReorderableViewPageState extends State<ReorderableViewPage> {
               key: ValueKey(items),
               elevation: 2,
               child: ListTile(
-                title: Text(items, style: TextStyle(color: Colors.white)),
-                leading: Icon(
+                title: Text(items, style: const TextStyle(color: Colors.white)),
+                leading: const Icon(
                   Icons.work,
                   color: Colors.white,
                 ),
               ),
             ),
         ],
-        onReorder: reorderData,
       ),
     );
   }

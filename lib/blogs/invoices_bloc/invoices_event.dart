@@ -9,8 +9,8 @@ abstract class InvoicesEvent extends Equatable {
 }
 
 class _InitInvoices extends InvoicesEvent {
-  List<Invoice> invoices;
-  _InitInvoices({
+  final List<Invoice> invoices;
+  const _InitInvoices({
     required this.invoices,
   });
 
@@ -19,12 +19,12 @@ class _InitInvoices extends InvoicesEvent {
 }
 
 class NewInvoice extends InvoicesEvent {
-  int month;
-  int year;
-  double fixRate;
-  double floatingNt;
-  double floatingVT;
-  NewInvoice({
+  final int month;
+  final int year;
+  final double fixRate;
+  final double floatingNt;
+  final double floatingVT;
+  const NewInvoice({
     required this.month,
     required this.year,
     required this.fixRate,
@@ -37,8 +37,8 @@ class NewInvoice extends InvoicesEvent {
 }
 
 class UpdateInvoice extends InvoicesEvent {
-  Invoice invoice;
-  UpdateInvoice({
+  final Invoice invoice;
+  const UpdateInvoice({
     required this.invoice,
   });
 
@@ -47,8 +47,8 @@ class UpdateInvoice extends InvoicesEvent {
 }
 
 class DeleteInvoice extends InvoicesEvent {
-  Invoice invoice;
-  DeleteInvoice({
+  final Invoice invoice;
+  const DeleteInvoice({
     required this.invoice,
   });
 

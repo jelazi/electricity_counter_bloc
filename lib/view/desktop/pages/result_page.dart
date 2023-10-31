@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:electricity_counter/view/desktop/pages/excel_page.dart';
 import 'package:excel/excel.dart' as exc;
 
 import 'package:file_picker/file_picker.dart';
@@ -231,7 +230,7 @@ class _ResultPageState extends State<ResultPage> {
       exc.Excel excel, String nameFile, BuildContext context) async {
     var fileBytes = excel.save();
     var directory = await getApplicationDocumentsDirectory();
-    var file = File("$nameFile")
+    var file = File(nameFile)
       ..createSync(recursive: true)
       ..writeAsBytesSync(fileBytes!);
 
@@ -263,7 +262,7 @@ Future<String> makePdf(BuildContext context, List listNameValue) async {
   Invoice? invoice = context.read<InvoicesBloc>().currentInvoice;
   final result = context.read<InvoicesBloc>().invoicesRepository.sumResult(
       invoice!, listEntry, context.read<InvoicesBloc>().usersRepository);
-  if (listEntry.isEmpty || invoice == null) {
+  if (listEntry.isEmpty) {
     print('listEntry or invoice is null');
     return '';
   }
@@ -323,7 +322,7 @@ Future<String> makePdf(BuildContext context, List listNameValue) async {
 pw.Container getPdfTableCell({required String text, PdfColor? color}) {
   var fontSize = 6.0;
   return pw.Container(
-      padding: pw.EdgeInsets.all(2),
+      padding: const pw.EdgeInsets.all(2),
       decoration: pw.BoxDecoration(
         border: pw.Border.all(color: PdfColors.grey),
         color: color ?? PdfColors.white,
@@ -337,7 +336,7 @@ pw.Container getPdfTableCell({required String text, PdfColor? color}) {
 pw.Container getPdfLeftHeaderCell(Result result, int index) {
   var fontSize = 6.0;
   return pw.Container(
-      padding: pw.EdgeInsets.all(2),
+      padding: const pw.EdgeInsets.all(2),
       decoration: pw.BoxDecoration(
         border: pw.Border.all(color: PdfColors.grey),
         color: PdfColors.yellow,

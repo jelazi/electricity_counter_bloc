@@ -63,6 +63,7 @@ class InvoicesRepository {
 
     listInvoices.add(invoice);
     settingsRepository.saveInvoice(invoice);
+    return null;
   }
 
   void deleteInvoice(Invoice invoice) {

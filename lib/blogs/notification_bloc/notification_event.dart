@@ -9,8 +9,8 @@ abstract class NotificationEvent extends Equatable {
 }
 
 class CreateMessage extends NotificationEvent {
-  String message;
-  CreateMessage({
+  final String message;
+  const CreateMessage({
     required this.message,
   });
   @override

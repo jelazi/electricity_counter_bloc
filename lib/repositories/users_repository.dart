@@ -4,16 +4,14 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:electricity_counter/models/entry.dart';
 import 'package:electricity_counter/repositories/settings_repository.dart';
-import 'package:electricity_counter/services/enum.dart';
 
-import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/user.dart';
 import 'package:collection/collection.dart';
 
 class UsersRepository {
-  var _users = <User>[];
+  final _users = <User>[];
   SettingsRepository settingsRepository;
   final _errorMessageController = StreamController<String>();
   Stream<String> get errorMessage => _errorMessageController.stream;
@@ -32,10 +30,9 @@ class UsersRepository {
     List<User> user = await settingsRepository.getListUserFromLocal();
 
     for (var user in _users) {
-      if (user.order == null) {
-        lastOrder++;
-        user.order = lastOrder;
-      }
+      lastOrder++;
+      user.order = lastOrder;
+
       if (user.order > lastOrder) {
         lastOrder = user.order;
       }
@@ -45,8 +42,7 @@ class UsersRepository {
   }
 
   Future<void> updateListUsersFromFirebase() async {
-    List<User> firebaseList =
-        await settingsRepository.getListUserFromFirebase();
+    List<User> firebaseList = await settingsRepository.getListUserFromFirebase();
     for (var i = 0; i < _users.length; i++) {
       for (var user in firebaseList) {
         if (_users[i].id == user.id && _users[i] != user) {
@@ -105,8 +101,7 @@ class UsersRepository {
     }
     var uuid = const Uuid();
     lastOrder++;
-    User user =
-        User(id: uuid.v4(), name: name, listEntries: [], order: lastOrder);
+    User user = User(id: uuid.v4(), name: name, listEntries: const [], order: lastOrder);
     _users.add(user);
     settingsRepository.saveUser(user);
 
@@ -129,14 +124,11 @@ class UsersRepository {
       if (entry.idUser == _users[i].id) {
         int month = entry.date.month;
         int year = entry.date.year;
-        var updateEntry = _users[i].listEntries.firstWhereOrNull((element) =>
-            element.date.month == month && element.date.year == year);
+        var updateEntry = _users[i].listEntries.firstWhereOrNull((element) => element.date.month == month && element.date.year == year);
         if (updateEntry != null) {
           print('update entry');
-          _users[i].listEntries[_users[i].listEntries.indexOf(updateEntry)].nt =
-              entry.nt;
-          _users[i].listEntries[_users[i].listEntries.indexOf(updateEntry)].vt =
-              entry.vt;
+          _users[i].listEntries[_users[i].listEntries.indexOf(updateEntry)].nt = entry.nt;
+          _users[i].listEntries[_users[i].listEntries.indexOf(updateEntry)].vt = entry.vt;
           settingsRepository.saveUser(_users[i]);
           return;
         }
@@ -167,8 +159,7 @@ class UsersRepository {
     for (int i = 0; i < _users.length; i++) {
       if (entry.idUser == _users[i].id) {
         var user = _users[i].copyWith();
-        var ent =
-            user.listEntries.firstWhereOrNull((element) => element == entry);
+        var ent = user.listEntries.firstWhereOrNull((element) => element == entry);
         if (ent == null) {
           print('entry is not here');
           return;

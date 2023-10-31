@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:electricity_counter/blogs/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 import 'invoices_page.dart';
@@ -29,15 +28,15 @@ class _HomePageMobileState extends State<HomePageMobile> {
           currentIndex: _selectedIndex,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.note),
+              icon: const Icon(Icons.note),
               label: 'measurePage'.tr(),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.record_voice_over),
+              icon: const Icon(Icons.record_voice_over),
               label: 'invoicesPage'.tr(),
             ),
           ]),
-      body: _selectedIndex == 0 ? MeasurePage() : InvoicesPage(),
+      body: _selectedIndex == 0 ? const MeasurePage() : const InvoicesPage(),
     );
   }
 }

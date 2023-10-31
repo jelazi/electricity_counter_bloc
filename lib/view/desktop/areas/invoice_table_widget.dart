@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:electricity_counter/view/desktop/pages/result_page.dart';

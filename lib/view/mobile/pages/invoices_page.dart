@@ -5,6 +5,6 @@ class InvoicesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Center(child: Text('Invoices page')));
+    return Container(child: const Center(child: Text('Invoices page')));
   }
 }

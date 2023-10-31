@@ -3,7 +3,6 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:electricity_counter/services/enum.dart';
 
 part 'entry.g.dart';
 

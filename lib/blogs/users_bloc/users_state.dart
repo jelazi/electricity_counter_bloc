@@ -2,32 +2,18 @@
 part of 'users_bloc.dart';
 
 class UsersState extends Equatable {
-  Map<String, String> users;
-  List<DateTime> months;
-  List<List<String>> entries;
-  List<List<double?>> nts;
-  List<List<double?>> vts;
-  List<Measure> listMeasure;
+  final Map<String, String> users;
+  final List<DateTime> months;
+  final List<List<String>> entries;
+  final List<List<double?>> nts;
+  final List<List<double?>> vts;
+  final List<Measure> listMeasure;
 
-  UsersState({
-    required this.users,
-    required this.months,
-    required this.entries,
-    required this.nts,
-    required this.vts,
-    required this.listMeasure,
-  });
+  const UsersState({required this.users, required this.months, required this.entries, required this.nts, required this.vts, required this.listMeasure});
 
   @override
   List<Object> get props {
-    return [
-      users,
-      months,
-      entries,
-      nts,
-      vts,
-      listMeasure,
-    ];
+    return [users, months, entries, nts, vts, listMeasure];
   }
 
   UsersState copyWith({
@@ -53,13 +39,5 @@ class UsersState extends Equatable {
 }
 
 class UsersInitial extends UsersState {
-  UsersInitial({users, month, entries, nts, vts, listMeasure})
-      : super(
-          users: users,
-          months: month,
-          entries: entries,
-          nts: nts,
-          vts: vts,
-          listMeasure: listMeasure,
-        );
+  UsersInitial({users, month, entries, nts, vts, listMeasure}) : super(users: users, months: month, entries: entries, nts: nts, vts: vts, listMeasure: listMeasure);
 }

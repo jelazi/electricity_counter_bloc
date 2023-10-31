@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:electricity_counter/blogs/bloc_export.dart';
 import 'package:electricity_counter/view/widgets/edit_dialogs/edit_dialog.dart';
 
-import '../../../models/invoice.dart';
 
 class AddInvoiceDialog extends StatefulWidget {
   String title;

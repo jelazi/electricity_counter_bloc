@@ -4,7 +4,6 @@ import 'package:electricity_counter/repositories/firebase_provider.dart';
 import '../models/user.dart';
 import '../services/enum.dart';
 import 'hive_provider.dart';
-import 'package:firedart/firedart.dart';
 
 class SettingsRepository {
   String locale = 'cs';

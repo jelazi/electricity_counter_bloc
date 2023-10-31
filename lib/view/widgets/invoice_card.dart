@@ -25,7 +25,7 @@ class InvoiceCard extends StatelessWidget {
               title: Text(text),
               trailing: IconButton(
                 key: key,
-                icon: Icon(
+                icon: const Icon(
                   Icons.more_vert,
                 ),
                 onPressed: () {

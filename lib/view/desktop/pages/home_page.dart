@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../areas/measure_table_widget.dart';
 
 class HomePageDesktop extends StatefulWidget {
-  HomePageDesktop({Key? key}) : super(key: key);
+  const HomePageDesktop({Key? key}) : super(key: key);
 
   @override
   State<HomePageDesktop> createState() => _HomePageDesktopState();
@@ -17,11 +17,11 @@ class HomePageDesktop extends StatefulWidget {
 class _HomePageDesktopState extends State<HomePageDesktop> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         body: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: const [
+      children: [
         MeasureTableWidget(),
         InvoiceTableWidget(),
       ],

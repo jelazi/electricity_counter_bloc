@@ -5,10 +5,10 @@ import '../models/user.dart';
 import '../services/enum.dart';
 
 class HiveProvider {
-  var _settingsBox;
-  var _usersBox;
-  var _invoiceBox;
-  HiveProvider() {}
+  dynamic _settingsBox;
+  dynamic _usersBox;
+  dynamic _invoiceBox;
+  HiveProvider();
 
   Future<void> initBoxes() async {
     _settingsBox = await Hive.openBox('settingsBox');

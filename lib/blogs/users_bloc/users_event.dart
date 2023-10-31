@@ -9,43 +9,43 @@ class UsersEvent extends Equatable {
 }
 
 class _CreateUsers extends UsersEvent {
-  List<User> users;
-  _CreateUsers({required this.users});
+  final List<User> users;
+  const _CreateUsers({required this.users});
 
   @override
   List<Object> get props => [users];
 }
 
 class AddUser extends UsersEvent {
-  String nameUser;
-  AddUser({required this.nameUser});
+  final String nameUser;
+  const AddUser({required this.nameUser});
 
   @override
   List<Object> get props => [nameUser];
 }
 
 class RemoveUser extends UsersEvent {
-  String id;
-  RemoveUser({required this.id});
+  final String id;
+  const RemoveUser({required this.id});
 
   @override
   List<Object> get props => [id];
 }
 
 class ChangeOrderUsers extends UsersEvent {
-  List<String> nameOrder;
-  ChangeOrderUsers({required this.nameOrder});
+  final List<String> nameOrder;
+  const ChangeOrderUsers({required this.nameOrder});
 
   @override
   List<Object> get props => [nameOrder];
 }
 
 class AddEntry extends UsersEvent {
-  String idUser;
-  DateTime date;
-  double nt;
-  double vt;
-  AddEntry({
+  final String idUser;
+  final DateTime date;
+  final double nt;
+  final double vt;
+  const AddEntry({
     required this.idUser,
     required this.date,
     required this.nt,
@@ -57,10 +57,10 @@ class AddEntry extends UsersEvent {
 }
 
 class AddListEntry extends UsersEvent {
-  List<List<String>> entries;
-  int year;
-  int month;
-  AddListEntry({
+  final List<List<String>> entries;
+  final int year;
+  final int month;
+  const AddListEntry({
     required this.entries,
     required this.year,
     required this.month,
@@ -71,9 +71,9 @@ class AddListEntry extends UsersEvent {
 }
 
 class RemoveEntry extends UsersEvent {
-  String idUser;
-  DateTime date;
-  RemoveEntry({
+  final String idUser;
+  final DateTime date;
+  const RemoveEntry({
     required this.idUser,
     required this.date,
   });

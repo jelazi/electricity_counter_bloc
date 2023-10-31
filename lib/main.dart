@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:electricity_counter/models/entry.dart';
 import 'package:electricity_counter/models/user.dart';
-import 'package:electricity_counter/repositories/hive_store.dart';
 import 'package:electricity_counter/repositories/invoices_repository.dart';
 import 'package:electricity_counter/repositories/users_repository.dart';
 
@@ -35,12 +34,9 @@ void main(List<String> args) async {
   Firestore.initialize(projectId);
   SettingsRepository settingsRepository = SettingsRepository();
   await settingsRepository.initBoxes();
-  print("here");
-  UsersRepository usersRepository =
-      UsersRepository(settingsRepository: settingsRepository);
+  UsersRepository usersRepository = UsersRepository(settingsRepository: settingsRepository);
   await usersRepository.initListUsers();
-  InvoicesRepository invoicesRepository =
-      InvoicesRepository(settingsRepository: settingsRepository);
+  InvoicesRepository invoicesRepository = InvoicesRepository(settingsRepository: settingsRepository);
   await invoicesRepository.initInvoices();
 
   runApp(
@@ -52,9 +48,7 @@ void main(List<String> args) async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => NotificationBloc(
-                usersRepository: usersRepository,
-                invoicesRepository: invoicesRepository),
+            create: (context) => NotificationBloc(usersRepository: usersRepository, invoicesRepository: invoicesRepository),
           ),
           BlocProvider(
               create: ((context) => InvoicesBloc(
@@ -64,10 +58,7 @@ void main(List<String> args) async {
                     invoicesRepository: invoicesRepository,
                   ))),
           BlocProvider(
-            create: (context) => UsersBloc(
-                isDesktop: isDesktop,
-                usersRepository: usersRepository,
-                settingsRepository: settingsRepository),
+            create: (context) => UsersBloc(isDesktop: isDesktop, usersRepository: usersRepository, settingsRepository: settingsRepository),
           ),
         ],
         child: BlocBuilder<UsersBloc, UsersState>(
@@ -84,14 +75,11 @@ void main(List<String> args) async {
               home: BlocListener<NotificationBloc, NotificationState>(
                 listener: (context, state) {
                   if (state.message.isNotEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message.last)));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message.last)));
                   }
                 },
                 child: Container(
-                  child: Platform.isAndroid || Platform.isIOS
-                      ? const HomePageMobile()
-                      : HomePageDesktop(),
+                  child: Platform.isAndroid || Platform.isIOS ? const HomePageMobile() : const HomePageDesktop(),
                 ),
               ),
             );

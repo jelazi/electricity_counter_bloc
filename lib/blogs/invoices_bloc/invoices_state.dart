@@ -2,10 +2,10 @@
 part of 'invoices_bloc.dart';
 
 class InvoicesState extends Equatable {
-  Map<String, String> invoices;
+  final Map<String, String> invoices;
 
-  List<List<String>> invoicesData;
-  InvoicesState({
+  final List<List<String>> invoicesData;
+  const InvoicesState({
     required this.invoices,
     required this.invoicesData,
   });
@@ -25,9 +25,5 @@ class InvoicesState extends Equatable {
 }
 
 class InvoicesInitial extends InvoicesState {
-  InvoicesInitial({invoices, invoicesData})
-      : super(
-          invoices: invoices,
-          invoicesData: invoicesData,
-        );
+  const InvoicesInitial({required super.invoices, required super.invoicesData});
 }

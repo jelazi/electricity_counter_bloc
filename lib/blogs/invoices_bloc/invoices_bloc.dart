@@ -1,12 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:core';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 import 'package:electricity_counter/repositories/invoices_repository.dart';
 import 'package:electricity_counter/services/enum.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../models/invoice.dart';
 import '../../repositories/settings_repository.dart';
@@ -48,8 +47,7 @@ class InvoicesBloc extends Bloc<InvoicesEvent, InvoicesState> {
   void _newInvoice(NewInvoice event, Emitter<InvoicesState> emit) {
     final state = this.state;
     DateTime date = DateTime(event.year, event.month, 1);
-    invoicesRepository.newInvoice(
-        date, event.fixRate, event.floatingNt, event.floatingVT);
+    invoicesRepository.newInvoice(date, event.fixRate, event.floatingNt, event.floatingVT);
     var list = _generateInvoicesTableData();
     emit(state.copyWith(invoices: list[0], invoicesData: list[1]));
   }
