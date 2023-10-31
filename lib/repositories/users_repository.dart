@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:electricity_counter/models/entry.dart';
 import 'package:electricity_counter/repositories/settings_repository.dart';
 import 'package:electricity_counter/services/enum.dart';
-import 'package:f_logs/f_logs.dart';
+
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -30,17 +30,23 @@ class UsersRepository {
 
   Future<void> initListUsers() async {
     List<User> user = await settingsRepository.getListUserFromLocal();
-    _users = user;
+
     for (var user in _users) {
+      if (user.order == null) {
+        lastOrder++;
+        user.order = lastOrder;
+      }
       if (user.order > lastOrder) {
         lastOrder = user.order;
       }
     }
+    // _users = user;
     await updateListUsersFromFirebase();
   }
 
   Future<void> updateListUsersFromFirebase() async {
-    List<User> firebaseList = await settingsRepository.getListUserFromFirebase();
+    List<User> firebaseList =
+        await settingsRepository.getListUserFromFirebase();
     for (var i = 0; i < _users.length; i++) {
       for (var user in firebaseList) {
         if (_users[i].id == user.id && _users[i] != user) {
@@ -93,13 +99,14 @@ class UsersRepository {
 
   User? createNewUser(String name) {
     if (_users.firstWhereOrNull((element) => element.name == name) != null) {
-      FLog.warning(text: 'this user name is already in use');
+      print('this user name is already in use');
       _errorMessageController.add(('userExists').tr());
       return null;
     }
     var uuid = const Uuid();
     lastOrder++;
-    User user = User(id: uuid.v4(), name: name, listEntries: [], order: lastOrder);
+    User user =
+        User(id: uuid.v4(), name: name, listEntries: [], order: lastOrder);
     _users.add(user);
     settingsRepository.saveUser(user);
 
@@ -122,11 +129,14 @@ class UsersRepository {
       if (entry.idUser == _users[i].id) {
         int month = entry.date.month;
         int year = entry.date.year;
-        var updateEntry = _users[i].listEntries.firstWhereOrNull((element) => element.date.month == month && element.date.year == year);
+        var updateEntry = _users[i].listEntries.firstWhereOrNull((element) =>
+            element.date.month == month && element.date.year == year);
         if (updateEntry != null) {
-          FLog.debug(text: 'update entry');
-          _users[i].listEntries[_users[i].listEntries.indexOf(updateEntry)].nt = entry.nt;
-          _users[i].listEntries[_users[i].listEntries.indexOf(updateEntry)].vt = entry.vt;
+          print('update entry');
+          _users[i].listEntries[_users[i].listEntries.indexOf(updateEntry)].nt =
+              entry.nt;
+          _users[i].listEntries[_users[i].listEntries.indexOf(updateEntry)].vt =
+              entry.vt;
           settingsRepository.saveUser(_users[i]);
           return;
         }
@@ -157,15 +167,16 @@ class UsersRepository {
     for (int i = 0; i < _users.length; i++) {
       if (entry.idUser == _users[i].id) {
         var user = _users[i].copyWith();
-        var ent = user.listEntries.firstWhereOrNull((element) => element == entry);
+        var ent =
+            user.listEntries.firstWhereOrNull((element) => element == entry);
         if (ent == null) {
-          FLog.error(text: 'entry is not here');
+          print('entry is not here');
           return;
         }
         user.listEntries.remove(ent);
         _users[i] = user;
         settingsRepository.saveUser(_users[i]);
-        FLog.debug(text: '${_users[i].listEntries.length}');
+        print('${_users[i].listEntries.length}');
         return;
       }
     }

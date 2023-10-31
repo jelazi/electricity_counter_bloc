@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:easy_localization/easy_localization.dart';
-import 'package:f_logs/f_logs.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -95,7 +95,7 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
                               ))
                           .toList(),
                       onChanged: (value) {
-                        FLog.debug(text: 'value: $value');
+                        print('value: $value');
                         setState(() {
                           widget.selectedMonth =
                               value as String? ?? widget.selectedMonth;
@@ -119,7 +119,7 @@ class _AddInvoiceDialogState extends State<AddInvoiceDialog> {
                               ))
                           .toList(),
                       onChanged: (value) {
-                        FLog.debug(text: 'value: $value');
+                        print('value: $value');
                         setState(() {
                           widget.selectedYear =
                               value as String? ?? widget.selectedYear;

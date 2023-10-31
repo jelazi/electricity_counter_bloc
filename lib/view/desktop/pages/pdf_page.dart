@@ -2,7 +2,7 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:f_logs/f_logs.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,7 +82,7 @@ class PdfScreen extends StatelessWidget {
         fileName: nameFile,
       );
       if (outputFile == null) {
-        FLog.warning(text: 'file picker cancel');
+        print('file picker cancel');
       } else {
         content.copy(outputFile);
       }

@@ -1,6 +1,4 @@
 //import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:f_logs/model/flog/flog.dart';
-
 import '../models/invoice.dart';
 import '../models/user.dart';
 import 'package:firedart/firedart.dart';
@@ -18,7 +16,7 @@ class FirebaseProvider {
     try {
       await userCollection.document(user.id).update(user.toJson());
     } catch (e) {
-      FLog.error(text: '$e');
+      print('$e');
     }
   }
 
@@ -26,7 +24,7 @@ class FirebaseProvider {
     try {
       await userCollection.document(user.id).update(user.toJson());
     } catch (e) {
-      FLog.error(text: '$e');
+      print('$e');
     }
   }
 
@@ -37,7 +35,7 @@ class FirebaseProvider {
         await userCollection.document(user.id).delete();
       }
     } catch (e) {
-      FLog.error(text: '$e');
+      print('$e');
     }
   }
 
@@ -49,7 +47,7 @@ class FirebaseProvider {
         listUsers.add(User.fromJson(doc.map));
       }
     } catch (e) {
-      FLog.error(text: '$e');
+      print('$e');
     }
     return listUsers;
   }
@@ -58,7 +56,7 @@ class FirebaseProvider {
     try {
       await invoicesCollection.document(invoice.id).update(invoice.toJson());
     } catch (e) {
-      FLog.error(text: '$e');
+      print('$e');
     }
   }
 
@@ -66,7 +64,7 @@ class FirebaseProvider {
     try {
       await invoicesCollection.document(invoice.id).update(invoice.toJson());
     } catch (e) {
-      FLog.error(text: '$e');
+      print('$e');
     }
   }
 
@@ -77,7 +75,7 @@ class FirebaseProvider {
         await invoicesCollection.document(invoice.id).delete();
       }
     } catch (e) {
-      FLog.error(text: '$e');
+      print('$e');
     }
   }
 
@@ -89,7 +87,7 @@ class FirebaseProvider {
         listInvoices.add(Invoice.fromJson(doc.map));
       }
     } catch (e) {
-      FLog.error(text: '$e');
+      print('$e');
     }
     return listInvoices;
   }

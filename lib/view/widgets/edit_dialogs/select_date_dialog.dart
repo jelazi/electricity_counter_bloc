@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:electricity_counter/blogs/bloc_export.dart';
 import 'package:electricity_counter/models/invoice.dart';
 import 'package:electricity_counter/view/widgets/edit_dialogs/edit_dialog.dart';
-import 'package:f_logs/f_logs.dart';
+
 import 'package:flutter/material.dart';
 
 class SelectDateDialog extends StatefulWidget {
@@ -70,13 +70,13 @@ class _SelectDateDialogState extends State<SelectDateDialog> {
                 listEntry,
               );
             } else {
-              FLog.debug(text: 'there is not entries');
+              print('there is not entries');
               context
                   .read<NotificationBloc>()
                   .add(CreateMessage(message: ('noEntriesThisDate'.tr())));
             }
           } else {
-            FLog.debug(text: 'something problem');
+            print('something problem');
             context
                 .read<NotificationBloc>()
                 .add(CreateMessage(message: ('noCorrectDateInvoice'.tr())));
@@ -99,7 +99,7 @@ class _SelectDateDialogState extends State<SelectDateDialog> {
                             ))
                         .toList(),
                     onChanged: (value) {
-                      FLog.debug(text: 'value: $value');
+                      print('value: $value');
                       setState(() {
                         widget.selectedMonth = value as String? ?? 'Leden';
                       });
@@ -122,7 +122,7 @@ class _SelectDateDialogState extends State<SelectDateDialog> {
                             ))
                         .toList(),
                     onChanged: (value) {
-                      FLog.debug(text: 'value: $value');
+                      print('value: $value');
                       setState(() {
                         widget.selectedYear =
                             value as String? ?? widget.selectedYear;

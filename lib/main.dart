@@ -6,9 +6,9 @@ import 'package:electricity_counter/models/user.dart';
 import 'package:electricity_counter/repositories/hive_store.dart';
 import 'package:electricity_counter/repositories/invoices_repository.dart';
 import 'package:electricity_counter/repositories/users_repository.dart';
-import 'package:electricity_counter/services/my_logger.dart';
+
 import 'package:electricity_counter/view/desktop/pages/home_page.dart';
-import 'package:f_logs/f_logs.dart';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -29,12 +29,13 @@ void main(List<String> args) async {
   if (isDesktop) {
     await DesktopWindow.setMinWindowSize(const Size(800, 600));
   }
-  MyLogger();
+
   // FLog.debug(text: 'start App');
   await initHiveFunction();
   Firestore.initialize(projectId);
   SettingsRepository settingsRepository = SettingsRepository();
   await settingsRepository.initBoxes();
+  print("here");
   UsersRepository usersRepository =
       UsersRepository(settingsRepository: settingsRepository);
   await usersRepository.initListUsers();
